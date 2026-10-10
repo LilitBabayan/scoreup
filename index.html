@@ -1,0 +1,485 @@
+<title>Score Up Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky top bar with tabs, single centered column (max 960px); overview is a gauge + trend, other tabs are lists. */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --surface-2:#eaeef4; --line:#d9dfe8;
+  --ink:#14213d; --ink-2:#4a5775; --ink-3:#7a8499;
+  --accent:#e8590c; --accent-ink:#ffffff; --accent-soft:#fdeadd;
+  --good:#1f8a5b; --good-soft:#dff3ea; --warn:#b7791f; --warn-soft:#fbefd5; --bad:#c92a3a; --bad-soft:#fbe0e3;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --body:'Figtree','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1526; --surface:#16213a; --surface-2:#1e2b49; --line:#2a3858;
+  --ink:#eef2fa; --ink-2:#aab6d1; --ink-3:#7886a6;
+  --accent:#ff8a4c; --accent-ink:#1a1006; --accent-soft:#3a2314;
+  --good:#47c996; --good-soft:#12342a; --warn:#e7b253; --warn-soft:#38290f; --bad:#ff6b79; --bad-soft:#3d1a20;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1526; --surface:#16213a; --surface-2:#1e2b49; --line:#2a3858;
+  --ink:#eef2fa; --ink-2:#aab6d1; --ink-3:#7886a6;
+  --accent:#ff8a4c; --accent-ink:#1a1006; --accent-soft:#3a2314;
+  --good:#47c996; --good-soft:#12342a; --warn:#e7b253; --warn-soft:#38290f; --bad:#ff6b79; --bad-soft:#3d1a20;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);padding-inline:16px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:960px;margin-inline:auto}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px 0}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:960px;margin-inline:auto}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:20px}
+.mark{width:28px;height:28px;border-radius:8px;background:var(--ink);display:grid;place-items:center}
+.mark svg{width:16px;height:16px}
+.who{display:flex;align-items:center;gap:10px;color:var(--ink-2);font-size:13px;min-width:0}
+.who b{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:600;font-size:12px;flex:none}
+nav.tabs{display:flex;gap:2px;max-width:960px;margin:8px auto 0;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;padding:10px 14px;color:var(--ink-2);font-weight:500;border-bottom:2px solid transparent;white-space:nowrap;display:flex;gap:6px;align-items:center}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.badge{background:var(--bad);color:#fff;border-radius:99px;font-size:11px;min-width:18px;height:18px;padding:0 5px;display:inline-grid;place-items:center;font-weight:600}
+main{padding-block:20px 48px}
+.note{font-size:12px;color:var(--ink-3);margin-top:20px}
+.grid{display:grid;gap:16px}
+.hero{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}
+.panel h2{font-size:16px;margin-bottom:12px}
+.eyebrow{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.gauge{display:flex;flex-direction:column;align-items:center;text-align:center}
+.gauge svg{width:100%;max-width:300px;height:auto}
+.score{font-family:var(--display);font-weight:700;font-size:56px;line-height:1;letter-spacing:-.02em}
+.band{display:inline-block;margin-top:6px;padding:3px 10px;border-radius:99px;background:var(--good-soft);color:var(--good);font-weight:600;font-size:13px}
+.delta{color:var(--ink-2);font-size:13px;margin-top:8px}
+.delta b{color:var(--good)}
+.scale{display:flex;width:100%;max-width:300px;height:6px;border-radius:3px;overflow:hidden;margin-top:18px;gap:2px}
+.scale i{flex:1}
+.scale-l{display:flex;justify-content:space-between;width:100%;max-width:300px;font-size:11px;color:var(--ink-3);margin-top:4px}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--ink-3);font:11px var(--body)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:16px}
+.stat{background:var(--surface-2);border-radius:10px;padding:12px}
+.stat .v{font-family:var(--display);font-weight:700;font-size:20px;display:block}
+.stat .l{font-size:12px;color:var(--ink-2)}
+.factor{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:12px 0;border-top:1px solid var(--line)}
+.factor:first-of-type{border-top:0;padding-top:0}
+.factor .t{font-weight:600}
+.factor .d{grid-column:1/-1;color:var(--ink-2);font-size:13px}
+.pill{font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;white-space:nowrap;align-self:start}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.mute{background:var(--surface-2);color:var(--ink-2)}
+.next{display:flex;gap:14px;align-items:center;background:var(--accent-soft);border-radius:10px;padding:12px 14px;margin-top:16px}
+.next .d{font-family:var(--display);font-weight:700;font-size:22px;line-height:1;text-align:center;color:var(--accent);flex:none;width:44px}
+.next .d small{display:block;font:600 11px var(--body);text-transform:uppercase}
+.next p{margin:0;font-size:13px;color:var(--ink-2)}
+.next b{color:var(--ink);font-size:15px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 14px;font-size:13px;color:var(--ink-2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.list{display:grid;gap:12px}
+.loan{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:12px}
+.loan.late{border-color:var(--bad)}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.row h3{font-size:17px}
+.sub{color:var(--ink-2);font-size:13px}
+.meter{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.kv div{min-width:0}
+.kv .l{font-size:12px;color:var(--ink-3);display:block}
+.kv .v{font-weight:600}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 14px;font-weight:600;font-size:13px}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.sw{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);cursor:pointer}
+.sw input{position:absolute;opacity:0}
+.sw span.t{width:34px;height:20px;background:var(--line);border-radius:10px;position:relative;transition:background .15s}
+.sw span.t::after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}
+.sw input:checked+span.t{background:var(--good)}
+.sw input:checked+span.t::after{transform:translateX(14px)}
+.sw input:focus-visible+span.t{outline:2px solid var(--accent);outline-offset:2px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600;padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.alert{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+.alert:first-child{border-top:0}
+.dot{width:10px;height:10px;border-radius:50%;margin-top:6px}
+.dot.bad{background:var(--bad)}.dot.warn{background:var(--warn)}.dot.info{background:var(--ink-3)}
+.alert.read .dot{opacity:.35}
+.alert p{margin:0}
+.empty{color:var(--ink-2);text-align:center;padding:28px 0}
+.auth{min-height:calc(100vh - 32px);display:grid;place-items:center;padding-block:24px}
+.auth-card{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px}
+.auth-card .brand{margin-bottom:20px}
+.auth-card h1{font-size:26px;margin-bottom:6px}
+.auth-card p.lead{color:var(--ink-2);margin:0 0 20px}
+.demo{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:18px;font-weight:500}
+.steps{display:flex;gap:6px;margin-bottom:18px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--surface-2)}
+.steps i.on{background:var(--accent)}
+.field{display:grid;gap:5px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600}
+.field input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+.field input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.field .err{color:var(--bad);font-size:12px;min-height:0}
+.field.bad input{border-color:var(--bad)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2);margin-bottom:14px}
+.check input{margin-top:3px;accent-color:var(--accent)}
+.btn.wide{width:100%;padding:11px 14px;font-size:15px}
+.swap{text-align:center;margin-top:16px;font-size:14px;color:var(--ink-2)}
+.swap button{background:none;border:0;color:var(--accent);font-weight:600;padding:0}
+.codebox{letter-spacing:.5em;text-align:center;font-size:22px}
+.btn.ghost{background:none;border-color:transparent;color:var(--ink-2)}
+@media (max-width:720px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .who span.n{display:none}
+  .score{font-size:48px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="auth wrap" id="auth" hidden></div>
+
+<header class="top" id="appHeader" hidden>
+  <div class="bar">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-6" stroke="#ff8a4c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      Score Up
+    </div>
+    <div class="who"><span class="n"><b id="userName"></b></span><div class="avatar" id="userAvatar" aria-hidden="true"></div><button class="btn ghost" data-signout>Sign out</button></div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
+    <button class="tab" role="tab" data-tab="loans" aria-selected="false">Loans</button>
+    <button class="tab" role="tab" data-tab="inquiries" aria-selected="false">Credit checks</button>
+    <button class="tab" role="tab" data-tab="guarantees" aria-selected="false">Guarantees</button>
+    <button class="tab" role="tab" data-tab="alerts" aria-selected="false">Alerts <span class="badge" id="alertBadge" hidden>0</span></button>
+  </nav>
+</header>
+
+<main class="wrap" id="view" hidden></main>
+
+<script>
+/* ---------- Mock data (all figures are made up) ---------- */
+const TODAY = new Date('2026-10-10');
+const SCORE_HISTORY = [
+  ['2025-11',668],['2025-12',672],['2026-01',671],['2026-02',679],['2026-03',684],['2026-04',690],
+  ['2026-05',688],['2026-06',695],['2026-07',699],['2026-08',704],['2026-09',707],['2026-10',712]
+];
+const LOANS = [
+  {id:'L1',name:'Car loan',lender:'Ameriabank',kind:'Car',original:6800000,balance:3912000,monthly:148000,rate:11.5,next:'2026-10-14',end:'2028-06-14',status:'current',remind:true},
+  {id:'L2',name:'Mortgage',lender:'Ardshinbank',kind:'Home',original:24500000,balance:19840000,monthly:231000,rate:9.8,next:'2026-10-20',end:'2041-02-20',status:'current',remind:true},
+  {id:'L3',name:'Consumer loan',lender:'Inecobank',kind:'Personal',original:1500000,balance:410000,monthly:96000,rate:15.9,next:'2026-10-05',end:'2027-02-05',status:'late',daysLate:5,remind:true},
+  {id:'L4',name:'Credit card',lender:'ACBA Bank',kind:'Card',original:800000,balance:184000,monthly:25000,rate:21.0,next:'2026-10-28',end:null,status:'current',remind:false},
+  {id:'L5',name:'Phone installment',lender:'Fast Bank',kind:'Personal',original:420000,balance:0,monthly:0,rate:0,next:null,end:'2026-03-12',status:'closed',remind:false}
+];
+const CHECKS = [
+  {date:'2026-09-18',who:'Converse Bank',type:'Hard',reason:'Loan application'},
+  {date:'2026-08-02',who:'Ameriabank',type:'Soft',reason:'Pre-approved offer'},
+  {date:'2026-06-27',who:'Evocabank',type:'Hard',reason:'Card application'},
+  {date:'2026-05-11',who:'Ucom',type:'Soft',reason:'Service contract'},
+  {date:'2026-02-09',who:'Ardshinbank',type:'Soft',reason:'Account review'},
+  {date:'2025-12-15',who:'Inecobank',type:'Hard',reason:'Loan application'}
+];
+const GUARANTEES = [
+  {id:'G1',role:'You guaranteed',person:'Davit Grigoryan (brother)',lender:'Ameriabank',amount:3000000,balance:1740000,status:'current',since:'2024-03-12'},
+  {id:'G2',role:'Guaranteed for you',person:'Mariam Sargsyan (mother)',lender:'Ardshinbank',amount:24500000,balance:19840000,status:'current',since:'2021-02-20'}
+];
+const ALERTS = [
+  {id:'A1',level:'bad',title:'Missed payment',text:'Consumer loan at Inecobank was due on 5 Oct. 96,000 AMD is 5 days overdue.',when:'2026-10-10',read:false},
+  {id:'A2',level:'warn',title:'Payment due in 4 days',text:'Car loan at Ameriabank: 148,000 AMD on 14 Oct.',when:'2026-10-10',read:false},
+  {id:'A3',level:'info',title:'New credit check',text:'Converse Bank requested your credit report on 18 Sep.',when:'2026-09-18',read:true},
+  {id:'A4',level:'info',title:'Score went up 5 points',text:'Your score is now 712, up from 707 last month.',when:'2026-10-01',read:false},
+  {id:'A5',level:'info',title:'Loan closed',text:'Phone installment at Fast Bank is paid off.',when:'2026-03-12',read:true}
+];
+
+/* ---------- Helpers ---------- */
+const $ = (s,r=document)=>r.querySelector(s);
+const amd = n => new Intl.NumberFormat('en-US').format(Math.round(n))+' AMD';
+const fmtDate = d => new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const daysUntil = d => Math.round((new Date(d)-TODAY)/864e5);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const BANDS = [[300,579,'Poor','bad'],[580,669,'Fair','warn'],[670,739,'Good','good'],[740,799,'Very good','good'],[800,850,'Excellent','good']];
+const bandOf = s => BANDS.find(b=>s>=b[0]&&s<=b[1]);
+
+let state = {tab:'overview', loanFilter:'all'};
+try{ const saved=JSON.parse(localStorage.getItem('scoreup-web')||'{}');
+  if(saved.remind) LOANS.forEach(l=>{ if(l.id in saved.remind) l.remind=saved.remind[l.id]; });
+  if(saved.paid) LOANS.forEach(l=>{ if(saved.paid.includes(l.id)) markPaid(l,true); });
+  if(saved.read) ALERTS.forEach(a=>{ if(saved.read.includes(a.id)) a.read=true; });
+}catch(e){}
+function persist(){
+  try{ localStorage.setItem('scoreup-web',JSON.stringify({
+    remind:Object.fromEntries(LOANS.map(l=>[l.id,l.remind])),
+    paid:LOANS.filter(l=>l.paidNow).map(l=>l.id),
+    read:ALERTS.filter(a=>a.read).map(a=>a.id)}));}catch(e){}
+}
+function markPaid(l,silent){
+  if(l.paidNow) return;
+  l.paidNow=true; l.status='current'; l.daysLate=0;
+  l.balance=Math.max(0,l.balance-l.monthly);
+  const d=new Date(l.next); d.setMonth(d.getMonth()+1); l.next=d.toISOString().slice(0,10);
+  if(l.id==='L3'){ const a=ALERTS.find(x=>x.id==='A1'); if(a){a.read=true;a.title='Payment received';a.level='info';a.text='Consumer loan at Inecobank: the overdue payment is now marked as paid.';} }
+}
+
+/* ---------- Score gauge & chart ---------- */
+function gauge(score){
+  const cx=150,cy=140,r=112,min=300,max=850;
+  const pt=(v,rad=r)=>{const a=Math.PI*(1-(v-min)/(max-min));return [cx+rad*Math.cos(a),cy-rad*Math.sin(a)];};
+  const arc=(a,b)=>{const [x1,y1]=pt(a),[x2,y2]=pt(b);return `M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`;};
+  const [kx,ky]=pt(score);
+  return `<svg viewBox="0 0 300 160" role="img" aria-label="Credit score ${score} on a scale of 300 to 850">
+    <path d="${arc(min,max)}" stroke="var(--surface-2)" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path d="${arc(min,score)}" stroke="var(--accent)" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <circle cx="${kx.toFixed(1)}" cy="${ky.toFixed(1)}" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="4"/>
+    <text x="${pt(min)[0]-6}" y="158" font-size="11" fill="var(--ink-3)" font-family="var(--body)">300</text>
+    <text x="${pt(max)[0]-18}" y="158" font-size="11" fill="var(--ink-3)" font-family="var(--body)">850</text>
+  </svg>`;
+}
+function trend(data){
+  const W=560,H=200,pl=36,pr=12,pt=14,pb=26, lo=640,hi=730;
+  const x=i=>pl+i*(W-pl-pr)/(data.length-1);
+  const y=v=>pt+(hi-v)*(H-pt-pb)/(hi-lo);
+  const line=data.map((d,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(d[1]).toFixed(1)}`).join(' ');
+  const area=line+` L${x(data.length-1)} ${H-pb} L${x(0)} ${H-pb} Z`;
+  const ticks=[650,680,710].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="3 4"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`).join('');
+  const mon=data.map((d,i)=>i%2===0||i===data.length-1?`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${new Date(d[0]+'-01').toLocaleDateString('en-GB',{month:'short'})}</text>`:'').join('');
+  const last=data[data.length-1];
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Score trend over the last 12 months, from ${data[0][1]} to ${last[1]}">
+    ${ticks}
+    <path d="${area}" fill="var(--accent)" opacity=".12"/>
+    <path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${x(data.length-1)}" cy="${y(last[1])}" r="5" fill="var(--accent)"/>
+    <text x="${x(data.length-1)-8}" y="${y(last[1])-10}" text-anchor="end" style="fill:var(--ink);font-weight:600">${last[1]}</text>
+    ${mon}</svg>`;
+}
+
+/* ---------- Views ---------- */
+function viewOverview(){
+  const score=SCORE_HISTORY.at(-1)[1], prev=SCORE_HISTORY.at(-2)[1], diff=score-prev, band=bandOf(score);
+  const active=LOANS.filter(l=>l.status!=='closed');
+  const debt=active.reduce((s,l)=>s+l.balance,0), monthly=active.reduce((s,l)=>s+l.monthly,0);
+  const upcoming=active.filter(l=>l.next&&l.status!=='late').sort((a,b)=>a.next.localeCompare(b.next))[0];
+  const late=active.filter(l=>l.status==='late');
+  const hard=CHECKS.filter(c=>c.type==='Hard'&&daysUntil(c.date)>-365).length;
+  const cardUse=Math.round(LOANS.find(l=>l.kind==='Card').balance/800000*100);
+  const factors=[
+    ['Payment history', late.length?['bad','Needs attention']:['good','Strong'], late.length?`${late.length} payment is overdue. Paying it soon limits the damage.`:'No missed payments in the last 12 months.'],
+    ['Credit card use', cardUse<30?['good',cardUse+'% used']:['warn',cardUse+'% used'], 'Staying under 30% of your limit helps your score.'],
+    ['Credit checks', hard>2?['warn',hard+' hard checks']:['good',hard+' hard checks'], 'Each hard check can lower your score for a few months.'],
+    ['Account age', ['good','5 yrs 7 mo'], 'Your oldest account was opened in March 2021.']
+  ];
+  return `<div class="grid hero">
+    <section class="panel gauge" aria-label="Your credit score">
+      <div class="eyebrow">Your credit score</div>
+      ${gauge(score)}
+      <div class="score num" style="margin-top:-62px">${score}</div>
+      <span class="band" style="${band[3]==='warn'?'background:var(--warn-soft);color:var(--warn)':band[3]==='bad'?'background:var(--bad-soft);color:var(--bad)':''}">${band[2]}</span>
+      <div class="delta">${diff>=0?`<b>+${diff}</b>`:`<b style="color:var(--bad)">${diff}</b>`} since last month · updated ${fmtDate(TODAY)}</div>
+      <div class="scale" aria-hidden="true"><i style="background:var(--bad)"></i><i style="background:var(--warn)"></i><i style="background:var(--good);opacity:.6"></i><i style="background:var(--good);opacity:.8"></i><i style="background:var(--good)"></i></div>
+      <div class="scale-l"><span>Poor</span><span>Fair</span><span>Good</span><span>Very good</span><span>Excellent</span></div>
+    </section>
+    <section class="panel">
+      <h2>Last 12 months</h2>
+      ${trend(SCORE_HISTORY)}
+      <div class="stats">
+        <div class="stat"><span class="v num">${active.length}</span><span class="l">Active loans</span></div>
+        <div class="stat"><span class="v num">${amd(debt).replace(' AMD','')}</span><span class="l">Total balance, AMD</span></div>
+        <div class="stat"><span class="v num">${amd(monthly).replace(' AMD','')}</span><span class="l">Monthly payments, AMD</span></div>
+      </div>
+      ${upcoming?`<div class="next"><div class="d num">${new Date(upcoming.next).getDate()}<small>${new Date(upcoming.next).toLocaleDateString('en-GB',{month:'short'})}</small></div><p><b>${esc(upcoming.name)} · ${amd(upcoming.monthly)}</b><br>${esc(upcoming.lender)}, due in ${daysUntil(upcoming.next)} days</p></div>`:''}
+    </section>
+  </div>
+  <section class="panel" style="margin-top:16px">
+    <h2>What affects your score</h2>
+    ${factors.map(f=>`<div class="factor"><span class="t">${f[0]}</span><span class="pill ${f[1][0]}">${f[1][1]}</span><span class="d">${f[2]}</span></div>`).join('')}
+  </section>
+  <p class="note">Demo with sample data. Scores, loans and lenders shown here are made up and are not connected to any credit bureau.</p>`;
+}
+
+function loanCard(l){
+  const paid = l.original? Math.round((1-l.balance/l.original)*100):0;
+  const st = l.status==='late'?`<span class="pill bad">${l.daysLate} days overdue</span>`:l.status==='closed'?`<span class="pill mute">Closed</span>`:`<span class="pill good">On time</span>`;
+  const d = l.next?daysUntil(l.next):null;
+  return `<article class="loan ${l.status==='late'?'late':''}" data-id="${l.id}">
+    <div class="row"><div><h3>${esc(l.name)}</h3><div class="sub">${esc(l.lender)} · ${l.kind}</div></div>${st}</div>
+    ${l.status!=='closed'?`<div><div class="meter" role="progressbar" aria-valuenow="${paid}" aria-valuemin="0" aria-valuemax="100" aria-label="Paid off"><i style="width:${paid}%"></i></div><div class="sub" style="margin-top:4px">${paid}% repaid</div></div>`:''}
+    <div class="kv">
+      <div><span class="l">Balance</span><span class="v num">${amd(l.balance)}</span></div>
+      <div><span class="l">Monthly</span><span class="v num">${l.monthly?amd(l.monthly):'-'}</span></div>
+      <div><span class="l">Rate</span><span class="v num">${l.rate?l.rate+'%':'-'}</span></div>
+      <div><span class="l">${l.status==='closed'?'Closed on':'Next payment'}</span><span class="v">${l.status==='closed'?fmtDate(l.end):fmtDate(l.next)}${d!==null&&l.status!=='closed'?` <span class="sub">(${d<0?-d+' days ago':d===0?'today':'in '+d+' days'})</span>`:''}</span></div>
+    </div>
+    ${l.status!=='closed'?`<div class="actions">
+      <label class="sw"><input type="checkbox" data-remind="${l.id}" ${l.remind?'checked':''}><span class="t"></span>Remind me 3 days before</label>
+      ${l.status==='late'?`<button class="btn primary" data-pay="${l.id}">Mark payment as paid</button>`:''}
+    </div>`:''}
+  </article>`;
+}
+function viewLoans(){
+  const f=state.loanFilter;
+  const list=LOANS.filter(l=>f==='all'?true:f==='active'?l.status!=='closed':f==='late'?l.status==='late':l.status==='closed');
+  const chips=[['all','All'],['active','Active'],['late','Overdue'],['closed','Closed']];
+  return `<div class="toolbar" role="group" aria-label="Filter loans">${chips.map(c=>`<button class="chip" data-filter="${c[0]}" aria-pressed="${f===c[0]}">${c[1]}</button>`).join('')}</div>
+  <div class="list">${list.length?list.map(loanCard).join(''):'<div class="panel empty">No loans match this filter.</div>'}</div>`;
+}
+function viewChecks(){
+  const hard=CHECKS.filter(c=>c.type==='Hard').length;
+  return `<section class="panel">
+    <h2>Who looked at your credit report</h2>
+    <p class="sub" style="margin:0 0 14px">${CHECKS.length} checks in the last 12 months. ${hard} were hard checks, which can lower your score slightly. Soft checks have no effect.</p>
+    <div class="tbl"><table><thead><tr><th>Date</th><th>Institution</th><th>Reason</th><th>Type</th></tr></thead><tbody>
+    ${CHECKS.map(c=>`<tr><td class="num">${fmtDate(c.date)}</td><td><b>${esc(c.who)}</b></td><td>${esc(c.reason)}</td><td><span class="pill ${c.type==='Hard'?'warn':'mute'}">${c.type}</span></td></tr>`).join('')}
+    </tbody></table></div>
+  </section>`;
+}
+function viewGuarantees(){
+  return `<div class="list">${GUARANTEES.map(g=>`<article class="loan">
+    <div class="row"><div><h3>${esc(g.role)}</h3><div class="sub">${esc(g.person)}</div></div><span class="pill good">Loan is current</span></div>
+    <div class="kv">
+      <div><span class="l">Lender</span><span class="v">${esc(g.lender)}</span></div>
+      <div><span class="l">Guaranteed amount</span><span class="v num">${amd(g.amount)}</span></div>
+      <div><span class="l">Remaining balance</span><span class="v num">${amd(g.balance)}</span></div>
+      <div><span class="l">Since</span><span class="v">${fmtDate(g.since)}</span></div>
+    </div></article>`).join('')}</div>
+    <p class="note">If a borrower you guaranteed misses payments, it can affect your score too.</p>`;
+}
+function viewAlerts(){
+  const unread=ALERTS.filter(a=>!a.read).length;
+  return `<section class="panel">
+    <div class="row" style="margin-bottom:6px"><h2>Alerts</h2>${unread?`<button class="btn" data-readall>Mark all as read</button>`:''}</div>
+    ${ALERTS.sort((a,b)=>b.when.localeCompare(a.when)).map(a=>`<div class="alert ${a.read?'read':''}"><span class="dot ${a.level}"></span><div><b>${esc(a.title)}</b><p class="sub">${esc(a.text)}</p></div><span class="sub num">${fmtDate(a.when)}</span></div>`).join('')}
+  </section>`;
+}
+
+/* ---------- Render & events ---------- */
+const VIEWS={overview:viewOverview,loans:viewLoans,inquiries:viewChecks,guarantees:viewGuarantees,alerts:viewAlerts};
+function render(){
+  $('#view').innerHTML=VIEWS[state.tab]();
+  document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.tab===state.tab));
+  const u=ALERTS.filter(a=>!a.read).length, b=$('#alertBadge'); b.hidden=!u; b.textContent=u;
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-tab]'); if(t){state.tab=t.dataset.tab; try{history.replaceState(null,'','#'+state.tab)}catch(_){} render(); window.scrollTo(0,0); return;}
+  const f=e.target.closest('[data-filter]'); if(f){state.loanFilter=f.dataset.filter; render(); return;}
+  const p=e.target.closest('[data-pay]'); if(p){markPaid(LOANS.find(l=>l.id===p.dataset.pay)); persist(); render(); return;}
+  if(e.target.closest('[data-readall]')){ALERTS.forEach(a=>a.read=true); persist(); render();}
+});
+document.addEventListener('change',e=>{
+  const r=e.target.closest('[data-remind]'); if(r){LOANS.find(l=>l.id===r.dataset.remind).remind=r.checked; persist();}
+});
+/* ---------- Registration & sign-in (demo only: nothing is sent anywhere) ---------- */
+const DEMO_CODE='123456';
+let user=null;
+let auth={mode:'register',step:1,form:{name:'',email:'',phone:''},errors:{}};
+try{ user=JSON.parse(localStorage.getItem('scoreup-user')||'null'); }catch(e){}
+
+const initials = n => n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+function field(id,label,type,val,err,extra=''){
+  return `<div class="field ${err?'bad':''}"><label for="${id}">${label}</label><input id="${id}" name="${id}" type="${type}" value="${esc(val)}" ${extra} aria-invalid="${!!err}" ${err?`aria-describedby="${id}-e"`:''}><span class="err" id="${id}-e">${err?esc(err):''}</span></div>`;
+}
+function authView(){
+  const a=auth, f=a.form, e=a.errors;
+  const demo=`<div class="demo">Demo only. Don't enter real details. Nothing is sent or stored on a server.</div>`;
+  const brand=`<div class="brand"><div class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-6" stroke="#ff8a4c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Score Up</div>`;
+  if(a.step===2){
+    return `<div class="auth-card">${brand}
+      ${a.mode==='register'?`<div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>`:''}
+      <h1>Enter the code</h1>
+      <p class="lead">We sent a 6-digit code to <b>${esc(a.mode==='register'?f.phone:f.email)}</b>.</p>
+      ${demo}
+      <form id="codeForm" novalidate>
+        ${field('code','Verification code','text','',e.code,'inputmode="numeric" maxlength="6" autocomplete="one-time-code" class="codebox" placeholder="······"')}
+        <p class="sub" style="margin:-4px 0 14px">Demo code: <b class="num">${DEMO_CODE}</b></p>
+        <button class="btn primary wide" type="submit">${a.mode==='register'?'Verify and create account':'Sign in'}</button>
+        <div class="swap"><button type="button" data-auth-back>Back</button></div>
+      </form></div>`;
+  }
+  if(a.mode==='login'){
+    return `<div class="auth-card">${brand}
+      <h1>Welcome back</h1><p class="lead">Sign in with the email you registered with.</p>${demo}
+      <form id="loginForm" novalidate>
+        ${field('email','Email','email',f.email,e.email,'autocomplete="email"')}
+        <button class="btn primary wide" type="submit">Send code</button>
+        <div class="swap">New here? <button type="button" data-auth-mode="register">Create an account</button></div>
+      </form></div>`;
+  }
+  return `<div class="auth-card">${brand}
+    <div class="steps" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+    <h1>Create your account</h1><p class="lead">See your credit score, loans and payment dates in one place.</p>${demo}
+    <form id="regForm" novalidate>
+      ${field('name','Full name','text',f.name,e.name,'autocomplete="name"')}
+      ${field('email','Email','email',f.email,e.email,'autocomplete="email"')}
+      ${field('phone','Mobile number','tel',f.phone,e.phone,'autocomplete="tel" placeholder="+374 XX XXX XXX"')}
+      <label class="check"><input type="checkbox" id="consent" ${f.consent?'checked':''}><span>I agree that Score Up may request my credit report from the credit bureau. (Demo: no request is made.)</span></label>
+      ${e.consent?`<div class="field bad" style="margin-top:-8px"><span class="err">${esc(e.consent)}</span></div>`:''}
+      <button class="btn primary wide" type="submit">Continue</button>
+      <div class="swap">Already have an account? <button type="button" data-auth-mode="login">Sign in</button></div>
+    </form></div>`;
+}
+function showApp(){
+  const signedIn=!!user;
+  $('#auth').hidden=signedIn; $('#appHeader').hidden=!signedIn; $('#view').hidden=!signedIn;
+  if(signedIn){
+    $('#userName').textContent=user.name; $('#userAvatar').textContent=initials(user.name);
+    render();
+  } else {
+    $('#auth').innerHTML=authView();
+    const first=$('#auth input:not([type=checkbox])'); if(first&&auth.focus!==false) first.focus();
+  }
+}
+function readForm(){
+  ['name','email','phone'].forEach(k=>{const el=$('#'+k,$('#auth')); if(el) auth.form[k]=el.value.trim();});
+  const c=$('#consent'); if(c) auth.form.consent=c.checked;
+}
+const emailOk = s => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
+const phoneOk = s => s.replace(/[\s()-]/g,'').match(/^\+?\d{8,12}$/);
+function validateReg(f){
+  const e={};
+  if(f.name.split(/\s+/).filter(Boolean).length<2) e.name='Enter your first and last name.';
+  if(!emailOk(f.email)) e.email='Enter a valid email, like name@example.com.';
+  if(!phoneOk(f.phone)) e.phone='Enter a phone number with 8 to 12 digits.';
+  if(!f.consent) e.consent='Please agree to continue.';
+  return e;
+}
+document.addEventListener('submit',ev=>{
+  ev.preventDefault();
+  const id=ev.target.id; readForm();
+  if(id==='regForm'){
+    auth.errors=validateReg(auth.form);
+    if(!Object.keys(auth.errors).length){auth.step=2;}
+  } else if(id==='loginForm'){
+    let saved=null; try{saved=JSON.parse(localStorage.getItem('scoreup-user')||'null');}catch(_){}
+    if(!emailOk(auth.form.email)) auth.errors={email:'Enter a valid email, like name@example.com.'};
+    else if(!saved||saved.email.toLowerCase()!==auth.form.email.toLowerCase()) auth.errors={email:'No account found for this email in this browser. Create one first.'};
+    else {auth.errors={}; auth.pending=saved; auth.step=2;}
+  } else if(id==='codeForm'){
+    const v=$('#code').value.trim();
+    if(v!==DEMO_CODE){ auth.errors={code:'That code is not right. Use the demo code shown below.'}; }
+    else {
+      user = auth.mode==='register' ? {name:auth.form.name,email:auth.form.email} : auth.pending;
+      try{localStorage.setItem('scoreup-user',JSON.stringify(user));}catch(_){}
+      auth={mode:'register',step:1,form:{name:'',email:'',phone:''},errors:{}};
+      state.tab='overview'; showApp(); window.scrollTo(0,0); return;
+    }
+  }
+  showApp();
+});
+document.addEventListener('click',ev=>{
+  const m=ev.target.closest('[data-auth-mode]');
+  if(m){readForm(); auth.mode=m.dataset.authMode; auth.step=1; auth.errors={}; showApp(); return;}
+  if(ev.target.closest('[data-auth-back]')){auth.step=1; auth.errors={}; showApp(); return;}
+  if(ev.target.closest('[data-signout]')){user=null; auth.mode='login'; auth.step=1; auth.errors={}; auth.form.email=''; showApp();}
+});
+
+const h=location.hash.slice(1); if(VIEWS[h]) state.tab=h;
+showApp();
+</script>
