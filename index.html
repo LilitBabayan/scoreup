@@ -23,6 +23,7 @@
   --accent:#ff8a4c; --accent-ink:#1a1006; --accent-soft:#3a2314;
   --good:#47c996; --good-soft:#12342a; --warn:#e7b253; --warn-soft:#38290f; --bad:#ff6b79; --bad-soft:#3d1a20;
   color-scheme:dark}
+[hidden]{display:none!important}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);padding-inline:16px}
 h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
@@ -167,7 +168,15 @@ tr:last-child td{border-bottom:0}
 
 <main class="wrap" id="view" hidden></main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
 <script>
+/* ---------- Database (Supabase) ----------
+   Paste your project's URL and anon/publishable key from Supabase > Project Settings > API.
+   Both are safe to publish: row level security (supabase/schema.sql) limits each user to their own rows.
+   Leave them empty to run in demo mode (code 123456, everything kept in this browser only). */
+const SUPABASE_URL = '';
+const SUPABASE_KEY = '';
+const sb = SUPABASE_URL && SUPABASE_KEY && window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 /* ---------- Mock data (all figures are made up) ---------- */
 const TODAY = new Date('2026-10-10');
 const SCORE_HISTORY = [
@@ -211,16 +220,23 @@ const BANDS = [[300,579,'Poor','bad'],[580,669,'Fair','warn'],[670,739,'Good','g
 const bandOf = s => BANDS.find(b=>s>=b[0]&&s<=b[1]);
 
 let state = {tab:'overview', loanFilter:'all'};
-try{ const saved=JSON.parse(localStorage.getItem('scoreup-web')||'{}');
+function applyPrefs(saved){
+  if(!saved) return;
   if(saved.remind) LOANS.forEach(l=>{ if(l.id in saved.remind) l.remind=saved.remind[l.id]; });
   if(saved.paid) LOANS.forEach(l=>{ if(saved.paid.includes(l.id)) markPaid(l,true); });
   if(saved.read) ALERTS.forEach(a=>{ if(saved.read.includes(a.id)) a.read=true; });
-}catch(e){}
+}
+if(!sb){ try{ applyPrefs(JSON.parse(localStorage.getItem('scoreup-web')||'{}')); }catch(e){} }
 function persist(){
-  try{ localStorage.setItem('scoreup-web',JSON.stringify({
-    remind:Object.fromEntries(LOANS.map(l=>[l.id,l.remind])),
+  const p={remind:Object.fromEntries(LOANS.map(l=>[l.id,l.remind])),
     paid:LOANS.filter(l=>l.paidNow).map(l=>l.id),
-    read:ALERTS.filter(a=>a.read).map(a=>a.id)}));}catch(e){}
+    read:ALERTS.filter(a=>a.read).map(a=>a.id)};
+  if(sb){
+    if(user&&user.id) sb.from('user_state').upsert({user_id:user.id,reminders:p.remind,paid_loans:p.paid,read_alerts:p.read,updated_at:new Date().toISOString()})
+      .then(({error})=>{ if(error) console.error('Could not save to the database:',error.message); });
+    return;
+  }
+  try{ localStorage.setItem('scoreup-web',JSON.stringify(p)); }catch(e){}
 }
 function markPaid(l,silent){
   if(l.paidNow) return;
@@ -376,30 +392,40 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{
   const r=e.target.closest('[data-remind]'); if(r){LOANS.find(l=>l.id===r.dataset.remind).remind=r.checked; persist();}
 });
-/* ---------- Registration & sign-in (demo only: nothing is sent anywhere) ---------- */
+/* ---------- Registration & sign-in ----------
+   With Supabase configured: a real 6-digit code is emailed, and the profile and actions are saved in the database.
+   Without it: demo mode, code 123456, nothing leaves this browser. */
 const DEMO_CODE='123456';
 let user=null;
 let auth={mode:'register',step:1,form:{name:'',email:'',phone:''},errors:{}};
-try{ user=JSON.parse(localStorage.getItem('scoreup-user')||'null'); }catch(e){}
+if(!sb){ try{ user=JSON.parse(localStorage.getItem('scoreup-user')||'null'); }catch(e){} }
 
 const initials = n => n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
 function field(id,label,type,val,err,extra=''){
   return `<div class="field ${err?'bad':''}"><label for="${id}">${label}</label><input id="${id}" name="${id}" type="${type}" value="${esc(val)}" ${extra} aria-invalid="${!!err}" ${err?`aria-describedby="${id}-e"`:''}><span class="err" id="${id}-e">${err?esc(err):''}</span></div>`;
 }
+function submitBtn(label,busyLabel){
+  return `<button class="btn primary wide" type="submit" ${auth.busy?'disabled aria-busy="true"':''}>${auth.busy?busyLabel:label}</button>`;
+}
 function authView(){
   const a=auth, f=a.form, e=a.errors;
-  const demo=`<div class="demo">Demo only. Don't enter real details. Nothing is sent or stored on a server.</div>`;
+  const demo=sb
+    ? `<div class="demo">Your name, email and phone are saved to your account. Scores and loans shown inside are sample data.</div>`
+    : `<div class="demo">Demo only. Don't enter real details. Nothing is sent or stored on a server.</div>`;
+  const formErr=e.form?`<div class="field bad"><span class="err" role="alert">${esc(e.form)}</span></div>`:'';
   const brand=`<div class="brand"><div class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-6" stroke="#ff8a4c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Score Up</div>`;
   if(a.step===2){
+    const to=sb||a.mode!=='register'?f.email:f.phone;
     return `<div class="auth-card">${brand}
       ${a.mode==='register'?`<div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>`:''}
       <h1>Enter the code</h1>
-      <p class="lead">We sent a 6-digit code to <b>${esc(a.mode==='register'?f.phone:f.email)}</b>.</p>
+      <p class="lead">We sent a 6-digit code to <b>${esc(to)}</b>.</p>
       ${demo}
       <form id="codeForm" novalidate>
         ${field('code','Verification code','text','',e.code,'inputmode="numeric" maxlength="6" autocomplete="one-time-code" class="codebox" placeholder="······"')}
-        <p class="sub" style="margin:-4px 0 14px">Demo code: <b class="num">${DEMO_CODE}</b></p>
-        <button class="btn primary wide" type="submit">${a.mode==='register'?'Verify and create account':'Sign in'}</button>
+        ${sb?`<p class="sub" style="margin:-4px 0 14px">Check your inbox and spam folder.</p>`:`<p class="sub" style="margin:-4px 0 14px">Demo code: <b class="num">${DEMO_CODE}</b></p>`}
+        ${formErr}
+        ${submitBtn(a.mode==='register'?'Verify and create account':'Sign in','Checking…')}
         <div class="swap"><button type="button" data-auth-back>Back</button></div>
       </form></div>`;
   }
@@ -408,7 +434,8 @@ function authView(){
       <h1>Welcome back</h1><p class="lead">Sign in with the email you registered with.</p>${demo}
       <form id="loginForm" novalidate>
         ${field('email','Email','email',f.email,e.email,'autocomplete="email"')}
-        <button class="btn primary wide" type="submit">Send code</button>
+        ${formErr}
+        ${submitBtn('Send code','Sending…')}
         <div class="swap">New here? <button type="button" data-auth-mode="register">Create an account</button></div>
       </form></div>`;
   }
@@ -421,7 +448,8 @@ function authView(){
       ${field('phone','Mobile number','tel',f.phone,e.phone,'autocomplete="tel" placeholder="+374 XX XXX XXX"')}
       <label class="check"><input type="checkbox" id="consent" ${f.consent?'checked':''}><span>I agree that Score Up may request my credit report from the credit bureau. (Demo: no request is made.)</span></label>
       ${e.consent?`<div class="field bad" style="margin-top:-8px"><span class="err">${esc(e.consent)}</span></div>`:''}
-      <button class="btn primary wide" type="submit">Continue</button>
+      ${formErr}
+      ${submitBtn('Continue','Sending code…')}
       <div class="swap">Already have an account? <button type="button" data-auth-mode="login">Sign in</button></div>
     </form></div>`;
 }
@@ -450,36 +478,86 @@ function validateReg(f){
   if(!f.consent) e.consent='Please agree to continue.';
   return e;
 }
-document.addEventListener('submit',ev=>{
-  ev.preventDefault();
-  const id=ev.target.id; readForm();
+
+/* Database helpers */
+function friendly(err){
+  const m=(err&&err.message)||'';
+  if(/signups not allowed|user not found/i.test(m)) return {email:'No account found for this email. Create one first.'};
+  if(/expired|invalid/i.test(m)) return {code:'That code is wrong or has expired. Check the latest email or go back and request a new one.'};
+  if(/rate limit|security purposes|too many/i.test(m)) return {form:'Too many attempts. Please wait a minute and try again.'};
+  return {form:'Something went wrong: '+(m||'please try again.')};
+}
+async function loadUser(session){
+  const u=session.user;
+  const [{data:prof},{data:st}]=await Promise.all([
+    sb.from('profiles').select('full_name').eq('id',u.id).maybeSingle(),
+    sb.from('user_state').select('reminders,paid_loans,read_alerts').eq('user_id',u.id).maybeSingle()
+  ]);
+  if(st) applyPrefs({remind:st.reminders,paid:st.paid_loans,read:st.read_alerts});
+  return {id:u.id,email:u.email,name:(prof&&prof.full_name)||u.email.split('@')[0]};
+}
+function sendCode(email,createUser){
+  return sb.auth.signInWithOtp({email,options:{shouldCreateUser:createUser}});
+}
+
+async function handleSubmit(id){
+  readForm();
   if(id==='regForm'){
     auth.errors=validateReg(auth.form);
-    if(!Object.keys(auth.errors).length){auth.step=2;}
+    if(Object.keys(auth.errors).length) return;
+    if(sb){ const {error}=await sendCode(auth.form.email,true); if(error){auth.errors=friendly(error); return;} }
+    auth.step=2;
   } else if(id==='loginForm'){
+    if(!emailOk(auth.form.email)){ auth.errors={email:'Enter a valid email, like name@example.com.'}; return; }
+    if(sb){ const {error}=await sendCode(auth.form.email,false); if(error){auth.errors=friendly(error); return;} auth.errors={}; auth.step=2; return; }
     let saved=null; try{saved=JSON.parse(localStorage.getItem('scoreup-user')||'null');}catch(_){}
-    if(!emailOk(auth.form.email)) auth.errors={email:'Enter a valid email, like name@example.com.'};
-    else if(!saved||saved.email.toLowerCase()!==auth.form.email.toLowerCase()) auth.errors={email:'No account found for this email in this browser. Create one first.'};
+    if(!saved||saved.email.toLowerCase()!==auth.form.email.toLowerCase()) auth.errors={email:'No account found for this email in this browser. Create one first.'};
     else {auth.errors={}; auth.pending=saved; auth.step=2;}
   } else if(id==='codeForm'){
-    const v=$('#code').value.trim();
-    if(v!==DEMO_CODE){ auth.errors={code:'That code is not right. Use the demo code shown below.'}; }
-    else {
+    const v=auth.code||'';
+    if(sb){
+      if(!/^\d{6}$/.test(v)){ auth.errors={code:'Enter the 6-digit code from the email.'}; return; }
+      const {data,error}=await sb.auth.verifyOtp({email:auth.form.email,token:v,type:'email'});
+      if(error){ auth.errors=friendly(error); return; }
+      if(auth.mode==='register'){
+        const f=auth.form;
+        const {error:pErr}=await sb.from('profiles').upsert({id:data.user.id,full_name:f.name,email:f.email,phone:f.phone,consent_at:new Date().toISOString()});
+        if(pErr){ auth.errors={form:'Your email is verified, but saving your profile failed: '+pErr.message}; return; }
+      }
+      user=await loadUser(data.session);
+    } else {
+      if(v!==DEMO_CODE){ auth.errors={code:'That code is not right. Use the demo code shown below.'}; return; }
       user = auth.mode==='register' ? {name:auth.form.name,email:auth.form.email} : auth.pending;
       try{localStorage.setItem('scoreup-user',JSON.stringify(user));}catch(_){}
-      auth={mode:'register',step:1,form:{name:'',email:'',phone:''},errors:{}};
-      state.tab='overview'; showApp(); window.scrollTo(0,0); return;
     }
+    auth={mode:'register',step:1,form:{name:'',email:'',phone:''},errors:{}};
+    state.tab='overview';
   }
-  showApp();
+}
+document.addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  if(auth.busy) return;
+  const codeEl=$('#code'); auth.code=codeEl?codeEl.value.trim():'';
+  auth.busy=true; auth.errors={}; readForm(); showApp();
+  try{ await handleSubmit(ev.target.id); }
+  catch(err){ auth.errors={form:'Something went wrong: '+(err.message||err)}; }
+  auth.busy=false; showApp(); if(user) window.scrollTo(0,0);
 });
-document.addEventListener('click',ev=>{
+document.addEventListener('click',async ev=>{
   const m=ev.target.closest('[data-auth-mode]');
   if(m){readForm(); auth.mode=m.dataset.authMode; auth.step=1; auth.errors={}; showApp(); return;}
   if(ev.target.closest('[data-auth-back]')){auth.step=1; auth.errors={}; showApp(); return;}
-  if(ev.target.closest('[data-signout]')){user=null; auth.mode='login'; auth.step=1; auth.errors={}; auth.form.email=''; showApp();}
+  if(ev.target.closest('[data-signout]')){
+    if(sb){ await sb.auth.signOut(); location.hash=''; location.reload(); return; }
+    user=null; auth.mode='login'; auth.step=1; auth.errors={}; auth.form.email=''; showApp();
+  }
 });
 
 const h=location.hash.slice(1); if(VIEWS[h]) state.tab=h;
-showApp();
+if(sb){
+  sb.auth.getSession().then(async ({data})=>{
+    if(data.session){ try{ user=await loadUser(data.session); }catch(e){ console.error(e); } }
+    showApp();
+  });
+} else showApp();
 </script>
