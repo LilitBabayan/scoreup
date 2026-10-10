@@ -1,3 +1,6 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Score Up Web</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
@@ -139,11 +142,72 @@ tr:last-child td{border-bottom:0}
 .swap button{background:none;border:0;color:var(--accent);font-weight:600;padding:0}
 .codebox{letter-spacing:.5em;text-align:center;font-size:22px}
 .btn.ghost{background:none;border-color:transparent;color:var(--ink-2)}
+.calc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;align-items:start}
+.calc .field input,.calc .field select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+.combo{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.combo select{width:auto!important}
+.affix{position:relative}
+.affix input{padding-right:52px!important}
+.affix span{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--ink-3);font-size:13px;pointer-events:none}
+.seg-wrap{border:0;padding:0;margin:0 0 6px;min-width:0}
+.seg-wrap legend{font-size:13px;font-weight:600;padding:0;margin-bottom:5px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--surface-2);border-radius:10px;padding:4px}
+.seg label{position:relative;text-align:center;padding:8px 6px;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer}
+.seg input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.seg label:has(input:checked){background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0/.12)}
+.seg label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:1px}
+.hint{font-size:12px;color:var(--ink-3);margin:0 0 14px}
+.big{font-family:var(--display);font-weight:700;font-size:36px;line-height:1.1;letter-spacing:-.02em}
+.split{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:14px 0 6px;background:var(--surface-2)}
+.split i{display:block;height:100%}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.compare{background:var(--surface-2);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--ink-2);margin-top:14px}
+.sched td,.sched th{text-align:right;white-space:nowrap}
+.sched td:first-child,.sched th:first-child{text-align:left}
+.me{display:flex;align-items:center;gap:10px;background:none;border:0;padding:2px 2px 2px 8px;border-radius:99px;min-width:0}
+.me:hover{background:var(--surface-2)}
+.me[aria-current="page"] .avatar{box-shadow:0 0 0 2px var(--accent)}
+.prof{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:16px;align-items:start}
+.idcard{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.avatar.lg{width:72px;height:72px;font-size:26px;font-family:var(--display);font-weight:700;margin-bottom:6px}
+.idcard h2{font-size:20px;margin:0}
+.facts{display:grid;gap:0;margin-top:14px;width:100%;text-align:left}
+.facts div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.facts dt{color:var(--ink-2);margin:0}.facts dd{margin:0;font-weight:600;text-align:right}
+.prof .field input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+.prof .field input[readonly]{color:var(--ink-2);background:var(--surface-2)}
+.saved{color:var(--good);font-size:13px;font-weight:600}
+.formrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.tip-you{display:grid;gap:10px}
+.tip-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--c,var(--ink-3));border-radius:12px;padding:14px 16px}
+.tip-card .ic{grid-row:span 2;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--cs,var(--surface-2));color:var(--c,var(--ink-2));font-weight:700;font-size:14px}
+.tip-card b{font-size:15px}
+.tip-card p{margin:0;color:var(--ink-2);font-size:13px}
+.tip-card .btn{grid-column:2;justify-self:start;margin-top:6px}
+.tip-group{margin-top:16px}
+.tip-group h2{margin-bottom:4px}
+details.tip{border-top:1px solid var(--line)}
+details.tip:first-of-type{border-top:0}
+details.tip summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.tip summary::-webkit-details-marker{display:none}
+details.tip summary::after{content:"+";color:var(--ink-3);font-weight:400;font-size:18px;line-height:1}
+details.tip[open] summary::after{content:"−"}
+details.tip p{margin:0 0 12px;color:var(--ink-2);font-size:14px}
+.lang{display:inline-flex;gap:2px;background:var(--surface-2);border-radius:99px;padding:2px}
+.lang button{border:0;background:none;border-radius:99px;padding:3px 9px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0/.15)}
+.lang-top{display:flex;justify-content:flex-end;margin-bottom:12px}
 @media (max-width:720px){
+  .who{gap:6px}
+  .btn.ghost{padding:7px 8px;white-space:nowrap}
+  .prof{grid-template-columns:minmax(0,1fr)}
+  .calc{grid-template-columns:minmax(0,1fr)}
   .hero{grid-template-columns:minmax(0,1fr)}
   .who span.n{display:none}
   .score{font-size:48px}
 }
+@media (max-width:480px){.brand .bt{display:none}.auth-card .brand .bt{display:inline}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -153,16 +217,18 @@ tr:last-child td{border-bottom:0}
   <div class="bar">
     <div class="brand">
       <div class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-6" stroke="#ff8a4c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      Score Up
+      <span class="bt">Score Up</span>
     </div>
-    <div class="who"><span class="n"><b id="userName"></b></span><div class="avatar" id="userAvatar" aria-hidden="true"></div><button class="btn ghost" data-signout>Sign out</button></div>
+    <div class="who"><span id="langSlot"></span><button class="me" data-tab="profile" data-i18n-aria="nav.profile"><span class="n"><b id="userName"></b></span><span class="avatar" id="userAvatar" aria-hidden="true"></span></button><button class="btn ghost" data-signout data-i18n="signout"></button></div>
   </div>
-  <nav class="tabs" role="tablist" aria-label="Sections">
-    <button class="tab" role="tab" data-tab="overview" aria-selected="true">Overview</button>
-    <button class="tab" role="tab" data-tab="loans" aria-selected="false">Loans</button>
-    <button class="tab" role="tab" data-tab="inquiries" aria-selected="false">Credit checks</button>
-    <button class="tab" role="tab" data-tab="guarantees" aria-selected="false">Guarantees</button>
-    <button class="tab" role="tab" data-tab="alerts" aria-selected="false">Alerts <span class="badge" id="alertBadge" hidden>0</span></button>
+  <nav class="tabs" role="tablist" data-i18n-aria="nav.sections">
+    <button class="tab" role="tab" data-tab="overview" aria-selected="true" data-i18n="tab.overview"></button>
+    <button class="tab" role="tab" data-tab="loans" aria-selected="false" data-i18n="tab.loans"></button>
+    <button class="tab" role="tab" data-tab="inquiries" aria-selected="false" data-i18n="tab.inquiries"></button>
+    <button class="tab" role="tab" data-tab="guarantees" aria-selected="false" data-i18n="tab.guarantees"></button>
+    <button class="tab" role="tab" data-tab="calculator" aria-selected="false" data-i18n="tab.calculator"></button>
+    <button class="tab" role="tab" data-tab="tips" aria-selected="false" data-i18n="tab.tips"></button>
+    <button class="tab" role="tab" data-tab="alerts" aria-selected="false"><span data-i18n="tab.alerts"></span> <span class="badge" id="alertBadge" hidden>0</span></button>
   </nav>
 </header>
 
@@ -210,10 +276,333 @@ const ALERTS = [
   {id:'A5',level:'info',title:'Loan closed',text:'Phone installment at Fast Bank is paid off.',when:'2026-03-12',read:true}
 ];
 
+/* ---------- Languages ----------
+   Armenian is the default. Text lives in I18N below; t(key, vars) picks the current language,
+   falls back to English, and handles plurals with {one, few, many, other} entries. */
+const LANGS={hy:{loc:'hy-AM',label:'Հայ',name:'Հայերեն'},en:{loc:'en-GB',label:'EN',name:'English'},ru:{loc:'ru-RU',label:'РУ',name:'Русский'}};
+let lang='hy';
+try{ const l=localStorage.getItem('scoreup-lang'); if(LANGS[l]) lang=l; }catch(e){}
+const LOC=()=>LANGS[lang].loc;
+const I18N={
+hy:{
+  cur:'֏', title:'Score Up',
+  'tab.overview':'Ընդհանուր','tab.loans':'Վարկեր','tab.inquiries':'Հարցումներ','tab.guarantees':'Երաշխավորություններ','tab.calculator':'Հաշվիչ','tab.tips':'Խորհուրդներ','tab.alerts':'Ծանուցումներ',
+  'nav.sections':'Բաժիններ','nav.profile':'Ձեր պրոֆիլը','nav.lang':'Լեզու', signout:'Դուրս գալ',
+  'ov.score':'Ձեր վարկային միավորը','ov.gauge':'Վարկային միավոր՝ {s}, 300-ից 850 սանդղակով','ov.delta':'{d} նախորդ ամսվա համեմատ · թարմացվել է {date}',
+  'band.0':'Վատ','band.1':'Միջին','band.2':'Լավ','band.3':'Շատ լավ','band.4':'Գերազանց',
+  'ov.last12':'Վերջին 12 ամիսները','ov.trend':'Միավորի փոփոխությունը վերջին 12 ամսում՝ {a}-ից {b}',
+  'ov.active':'Ակտիվ վարկեր','ov.balance':'Ընդհանուր մնացորդ','ov.monthly':'Ամսական վճարումներ','ov.due':'{lender}, վճարումը {n} օրից',
+  'ov.affects':'Ինչն է ազդում ձեր միավորի վրա',
+  'f.history':'Վճարումների պատմություն','f.attention':'Ուշադրություն է պահանջում','f.strong':'Լավ',
+  'f.historyBad':'{n} վճարում ժամկետանց է։ Որքան շուտ վճարեք, այնքան քիչ կլինի վնասը։','f.historyGood':'Վերջին 12 ամսում բաց թողնված վճարումներ չկան։',
+  'f.card':'Վարկային քարտի օգտագործում','f.used':'{n}% օգտագործված','f.cardD':'Սահմանաչափի 30%-ից ցածր մնալը օգնում է ձեր միավորին։',
+  'f.checks':'Վարկային հարցումներ','f.hardN':'{n} կոշտ հարցում','f.checksD':'Յուրաքանչյուր կոշտ հարցում կարող է մի քանի ամսով իջեցնել ձեր միավորը։',
+  'f.age':'Պատմության տևողություն','f.ageV':'5 տարի 7 ամիս','f.ageD':'Ձեր ամենահին հաշիվը բացվել է 2021 թ. մարտին։',
+  'ov.note':'Ցուցադրական տարբերակ՝ օրինակային տվյալներով։ Միավորները, վարկերը և վարկատուները հորինված են և կապված չեն որևէ վարկային բյուրոյի հետ։',
+  'loan.L1':'Ավտովարկ','loan.L2':'Հիփոթեք','loan.L3':'Սպառողական վարկ','loan.L4':'Վարկային քարտ','loan.L5':'Հեռախոսի ապառիկ',
+  'kind.Car':'Ավտո','kind.Home':'Բնակարան','kind.Personal':'Անձնական','kind.Card':'Քարտ',
+  'st.late':'{n} օր ուշացում','st.closed':'Փակված','st.ontime':'Ժամանակին','ln.paidAria':'Մարված','ln.repaid':'{n}% մարված',
+  'ln.balance':'Մնացորդ','ln.monthly':'Ամսական','ln.rate':'Տոկոսադրույք','ln.closedOn':'Փակվել է','ln.next':'Հաջորդ վճարում',
+  'rel.ago':'{n} օր առաջ','rel.today':'այսօր','rel.in':'{n} օրից',
+  'ln.remind':'Հիշեցնել 3 օր առաջ','ln.markPaid':'Նշել որպես վճարված','ln.filter':'Վարկերի զտիչ',
+  'chip.all':'Բոլորը','chip.active':'Ակտիվ','chip.late':'Ժամկետանց','chip.closed':'Փակված','ln.none':'Այս զտիչով վարկեր չկան։',
+  'ch.title':'Ով է դիտել ձեր վարկային պատմությունը','ch.sub':'Վերջին 12 ամսում՝ {n} հարցում։ Դրանցից {h}-ը կոշտ էին և կարող են փոքր-ինչ իջեցնել միավորը։ Փափուկ հարցումները չեն ազդում։',
+  'ch.date':'Ամսաթիվ','ch.who':'Կազմակերպություն','ch.reason':'Պատճառ','ch.type':'Տեսակ','type.Hard':'Կոշտ','type.Soft':'Փափուկ',
+  'r.loanApp':'Վարկի հայտ','r.preapproved':'Նախապես հաստատված առաջարկ','r.cardApp':'Քարտի հայտ','r.service':'Ծառայության պայմանագիր','r.review':'Հաշվի վերանայում',
+  'g.G1':'Դուք երաշխավորել եք','g.G2':'Ձեզ համար երաշխավորել են','person.G1':'Դավիթ Գրիգորյան (եղբայր)','person.G2':'Մարիամ Սարգսյան (մայր)',
+  'g.current':'Վարկը սպասարկվում է ժամանակին','g.lender':'Վարկատու','g.amount':'Երաշխավորված գումար','g.balance':'Մնացորդ','g.since':'Սկսած',
+  'g.note':'Եթե ձեր երաշխավորած վարկառուն ուշացնի վճարումները, դա կարող է ազդել նաև ձեր միավորի վրա։',
+  'al.title':'Ծանուցումներ','al.readAll':'Նշել բոլորը որպես կարդացված',
+  'al.A1.t':'Բաց թողնված վճարում','al.A1.x':'Ինեկոբանկում սպառողական վարկի վճարումը պետք է կատարվեր հոկտեմբերի 5-ին։ {amt} ժամկետանց է 5 օր։',
+  'al.A1p.t':'Վճարումը ստացված է','al.A1p.x':'Ինեկոբանկի սպառողական վարկ․ ժամկետանց վճարումը նշված է որպես վճարված։',
+  'al.A2.t':'Վճարման օրը 4 օրից է','al.A2.x':'Ամերիաբանկի ավտովարկ՝ {amt}, հոկտեմբերի 14-ին։',
+  'al.A3.t':'Նոր վարկային հարցում','al.A3.x':'Կոնվերս բանկը սեպտեմբերի 18-ին հարցում է կատարել ձեր վարկային պատմության վերաբերյալ։',
+  'al.A4.t':'Միավորը բարձրացել է 5-ով','al.A4.x':'Ձեր միավորն այժմ 712 է․ նախորդ ամսին այն 707 էր։',
+  'al.A5.t':'Վարկը փակված է','al.A5.x':'Ֆասթ բանկում հեռախոսի ապառիկն ամբողջությամբ մարված է։',
+  'c.title':'Վարկային հաշվիչ','c.amount':'Վարկի գումար','c.period':'Վարկի ժամկետ','c.years':'տարի','c.months':'ամիս','c.unit':'Ժամկետի միավոր',
+  'c.rate':'Տարեկան տոկոսադրույք','c.method':'Մարման եղանակ','c.annuity':'Անուիտետային','c.diff':'Դիֆերենցված',
+  'c.hintA':'Ամեն ամիս նույն վճարումը։ Սկզբնական վճարումները հիմնականում տոկոսներ են։',
+  'c.hintD':'Ամեն ամիս մարում եք մայր գումարի նույն մասը, ուստի վճարումները սկզբում ավելի մեծ են և աստիճանաբար նվազում են։ Ընդհանուր տոկոսներն ավելի քիչ են։',
+  'c.eAmount':'Մուտքագրեք գումար {min}-ից {max} {cur} միջակայքում։','c.eYears':'Մուտքագրեք 1-ից 40 տարի։','c.eMonths':'Մուտքագրեք 1-ից 480 ամիս։','c.eRate':'Մուտքագրեք տարեկան տոկոսադրույք 0-ից 100%։',
+  'c.fix':'Ուղղեք նշված դաշտերը՝ վճարումները տեսնելու համար։','c.monthly':'Ամսական վճարում',
+  'c.forN':'{n} ամսվա ընթացքում','c.every':'ամեն ամիս՝ {n} ամսվա ընթացքում','c.falling':'1-ին ամսում, իսկ {n}-րդ ամսում՝ {last}',
+  'c.sLoan':'Վարկի գումար','c.sInterest':'Ընդհանուր տոկոսներ','c.sTotal':'Ընդհանուր վճարելիք',
+  'c.split':'Ընդհանուր վճարման {a}%-ը վարկն է, {b}%-ը՝ տոկոսները','c.lLoan':'Վարկ {n}%','c.lInt':'Տոկոսներ {n}%',
+  'c.mA':'անուիտետային','c.mD':'դիֆերենցված',
+  'c.costMore':'Եթե ընտրեք {m} եղանակը, տոկոսները կավելանան {amt}-ով։',
+  'c.save':'Եթե ընտրեք {m} եղանակը, տոկոսների վրա կխնայեք {amt}, բայց առաջին վճարումը կլինի {first}։',
+  'c.sched':'Վճարումների ժամանակացույց','c.thMonth':'Ամիս','c.thPay':'Վճարում','c.thPrin':'Մայր գումար','c.thInt':'Տոկոս','c.thBal':'Մնացորդ',
+  'c.first12':'Ցույց տալ առաջին 12 ամիսը','c.all':'Ցույց տալ բոլոր {n} ամիսները','c.allCur':'Բոլոր գումարները դրամով են։',
+  'c.note':'Մոտավոր հաշվարկ է։ Բանկերը կարող են ավելացնել միջնորդավճարներ, ապահովագրություն կամ օրերը այլ կերպ հաշվել, ուստի իրական վճարումները կարող են տարբերվել։',
+  'p.since':'Գրանցման ամսաթիվ','p.consent':'Համաձայնություն հարցման համար','p.given':'Տրված է {d}','p.reminders':'Վճարման հիշեցումներ','p.ofLoans':'{a}՝ {n} վարկից',
+  'p.where':'Տվյալների պահպանում','p.inAcc':'Ձեր հաշվում','p.inBrowser':'Միայն այս բրաուզերում',
+  'p.details':'Անձնական տվյալներ','p.emailHint':'Դուք մուտք եք գործում այս էլ. փոստով, ուստի այն այստեղ փոխել հնարավոր չէ։',
+  'p.save':'Պահպանել','p.saving':'Պահպանվում է…','p.saved':'Պահպանված է','p.saveErr':'Չհաջողվեց պահպանել՝ ',
+  'p.remTitle':'Հիշեցումներ','p.remText':'Մենք հիշեցնում ենք վճարման օրվանից 3 օր առաջ։ Հիշեցումները միացված են ձեր {n} ակտիվ վարկերից {a}-ի համար։','p.manage':'Կառավարել «Վարկեր» բաժնում',
+  'p.soDb':'Կարող եք կրկին մուտք գործել էլ. փոստին ուղարկված կոդով։','p.soDemo':'Ցուցադրական հաշիվ․ դուրս գալուց հետո ձեր տվյալները մնում են այս բրաուզերում։',
+  'fld.name':'Անուն ազգանուն','fld.email':'Էլ. փոստ','fld.phone':'Բջջային հեռախոս',
+  'tp.forYou':'Խորհուրդներ ձեզ համար','tp.based':'Ձեր վարկերի, քարտի օգտագործման և վարկային հարցումների հիման վրա։',
+  'tp.late':'Մարեք ժամկետանց վճարումը՝ {loan}, {lender}','tp.lateX':'{amt}՝ {n} օր ուշացումով։ Հիմա վճարելը կնվազեցնի վնասը ձեր միավորին։','tp.toLoans':'Անցնել «Վարկեր» բաժին',
+  'tp.cardHigh':'Նվազեցրեք վարկային քարտի պարտքը','tp.cardHighX':'Դուք օգտագործում եք քարտի սահմանաչափի {n}%-ը։ 30%-ից ցածր իջեցնելը կարող է բարձրացնել միավորը։',
+  'tp.cardOk':'Քարտի օգտագործումը նորմալ է','tp.cardOkX':'Դուք օգտագործում եք սահմանաչափի {n}%-ը։ 30%-ից ցածր պահելը օգնում է միավորին։',
+  'tp.pause':'Ժամանակավորապես մի դիմեք նոր վարկերի','tp.pauseX':'Վերջին 12 ամսում ունեցել եք {n} կոշտ հարցում։ Հաջորդ հայտից առաջ մի քանի ամիս սպասելը կօգնի։','tp.toChecks':'Տեսնել հարցումները',
+  'tp.remOne':'Միացրեք հիշեցումները՝ {loan}','tp.remMany':'Միացրեք հիշեցումները {n} վարկի համար','tp.remX':'Վճարման օրից առաջ հիշեցում չեք ստանա։','tp.toRem':'Կառավարել հիշեցումները',
+  'tp.noLate':'Ժամկետանց վճարումներ չկան','tp.noLateX':'Շարունակեք վճարել ժամանակին․ սա ամենակարևորն է ձեր միավորի համար։',
+  'tp.note':'Ընդհանուր տեղեկատվություն է, ոչ թե ֆինանսական խորհրդատվություն։ Բանկերն ու վարկային բյուրոները կարող են գործոնները տարբեր կերպ գնահատել։',
+  tips:[
+    ['Վճարումներ',[
+      ['Յուրաքանչյուր վճարում կատարեք ժամանակին','Վճարումների պատմությունն ամենամեծ ազդեցությունն ունի ձեր միավորի վրա։ Նույնիսկ 30 օրից ավելի ուշացած մեկ վճարումը կարող է տարիներ շարունակ մնալ ձեր վարկային պատմության մեջ։'],
+      ['Միացրեք վճարման հիշեցումները','Վճարման օրից 3 օր առաջ ստացվող հիշեցումները օգնում են խուսափել ուշացումներից։ Դրանք կարող եք միացնել յուրաքանչյուր վարկի համար «Վարկեր» բաժնում։'],
+      ['Եթե բաց եք թողել վճարումը, վճարեք որքան հնարավոր է շուտ','Որքան երկար է վճարումը ժամկետանց, այնքան ավելի է այն վնասում միավորին։ Եթե չեք կարող վճարել, նախապես դիմեք բանկ և հարցրեք վերաժամկետավորման մասին։']]],
+    ['Վարկային քարտեր',[
+      ['Օգտագործեք քարտի սահմանաչափի 30%-ից պակասը','Օրինակ՝ 800 000 ֏ սահմանաչափի դեպքում աշխատեք պարտքը պահել 240 000 ֏-ից ցածր։ Որքան քիչ, այնքան լավ։'],
+      ['Հնարավորության դեպքում մարեք քարտի ամբողջ պարտքը','Միայն նվազագույն վճարումը կատարելիս պարտքն ու տոկոսներն ավելի երկար են բարձր մնում։'],
+      ['Առանց պատճառի մի փակեք ձեր ամենահին քարտը','Ավելի հին հաշիվները երկարացնում են ձեր վարկային պատմությունը, ինչը օգնում է միավորին։']]],
+    ['Վարկային հարցումներ',[
+      ['Կարճ ժամանակում շատ վարկային հայտեր մի ներկայացրեք','Յուրաքանչյուր հայտ սովորաբար առաջացնում է կոշտ հարցում։ Իրար մոտ մի քանի կոշտ հարցում կարող են իջեցնել միավորը։'],
+      ['Համեմատեք առաջարկները մինչև դիմելը','Սկզբում վարկային հաշվիչով համեմատեք վճարումներն ու ընդհանուր տոկոսները, ապա դիմեք միայն այնտեղ, որտեղ իմաստ ունի։'],
+      ['Ձեր միավորը ստուգելը չի վնասում','Ձեր սեփական վարկային պատմությունը դիտելը փափուկ հարցում է և չի ազդում միավորի վրա։']]],
+    ['Վարկեր և երաշխավորություններ',[
+      ['Ամսական վճարումները պահեք մատչելի','Ընդունված կանոն է՝ բոլոր վարկային վճարումները պահել ամսական եկամտի 40%-ից ցածր։'],
+      ['Զգույշ եղեք ուրիշի վարկը երաշխավորելիս','Եթե վարկառուն ուշացնի վճարումները, դա կարող է ազդել ձեր միավորի վրա, և գուցե ստիպված լինեք վճարել։'],
+      ['Վարկի վաղաժամկետ մարումը խնայում է տոկոսներ','Նախ ստուգեք պայմանագրում վաղաժամկետ մարման տույժերը։ Դիֆերենցված վարկի դեպքում ընդհանուր առմամբ ավելի քիչ տոկոս եք վճարում, քան անուիտետայինի դեպքում։']]]
+  ],
+  'a.demoDb':'Ձեր անունը, էլ. փոստը և հեռախոսը պահպանվում են ձեր հաշվում։ Ներսում ցուցադրվող միավորներն ու վարկերը օրինակային են։',
+  'a.demo':'Միայն ցուցադրական։ Մի մուտքագրեք իրական տվյալներ։ Ոչինչ չի ուղարկվում կամ պահվում սերվերում։',
+  'a.codeTitle':'Մուտքագրեք կոդը','a.sent':'Մենք 6-նիշանի կոդ ենք ուղարկել՝ <b>{to}</b>։','a.code':'Հաստատման կոդ','a.inbox':'Ստուգեք մուտքի արկղը և «Սպամ» թղթապանակը։','a.demoCode':'Ցուցադրական կոդ՝',
+  'a.verify':'Հաստատել և ստեղծել հաշիվ','a.signin':'Մուտք գործել','a.checking':'Ստուգվում է…','a.back':'Հետ',
+  'a.welcome':'Բարի վերադարձ','a.welcomeLead':'Մուտք գործեք այն էլ. փոստով, որով գրանցվել եք։','a.sendCode':'Ուղարկել կոդը','a.sending':'Ուղարկվում է…',
+  'a.new':'Նո՞ր եք այստեղ։','a.create':'Ստեղծել հաշիվ','a.regTitle':'Ստեղծեք ձեր հաշիվը','a.regLead':'Տեսեք ձեր վարկային միավորը, վարկերը և վճարման օրերը մեկ տեղում։',
+  'a.consent':'Համաձայն եմ, որ Score Up-ը վարկային բյուրոյից հարցում կատարի իմ վարկային պատմության վերաբերյալ։ (Ցուցադրական․ հարցում չի կատարվում։)',
+  'a.continue':'Շարունակել','a.sendingCode':'Կոդն ուղարկվում է…','a.have':'Արդեն ունե՞ք հաշիվ։',
+  'e.name':'Մուտքագրեք ձեր անունը և ազգանունը։','e.email':'Մուտքագրեք ճիշտ էլ. փոստ, օրինակ՝ name@example.com։','e.phone':'Մուտքագրեք 8-ից 12 թվանշանից բաղկացած հեռախոսահամար։',
+  'e.consent':'Շարունակելու համար տվեք ձեր համաձայնությունը։','e.noAcc':'Այս էլ. փոստով հաշիվ չի գտնվել։ Նախ ստեղծեք հաշիվ։','e.noAccLocal':'Այս բրաուզերում այս էլ. փոստով հաշիվ չի գտնվել։ Նախ ստեղծեք հաշիվ։',
+  'e.codeBad':'Կոդը սխալ է կամ ժամկետանց։ Ստուգեք վերջին նամակը կամ վերադարձեք և նոր կոդ ստացեք։','e.tooMany':'Չափազանց շատ փորձեր։ Սպասեք մեկ րոպե և նորից փորձեք։',
+  'e.generic':'Ինչ-որ բան սխալ ընթացավ՝ ','e.tryAgain':'փորձեք կրկին։','e.code6':'Մուտքագրեք նամակով ստացված 6-նիշանի կոդը։','e.demoCode':'Կոդը ճիշտ չէ։ Օգտագործեք ստորև նշված ցուցադրական կոդը։',
+  'e.profileFail':'Ձեր էլ. փոստը հաստատված է, բայց պրոֆիլը պահպանել չհաջողվեց՝ '
+},
+en:{
+  cur:'AMD', title:'Score Up',
+  'tab.overview':'Overview','tab.loans':'Loans','tab.inquiries':'Credit checks','tab.guarantees':'Guarantees','tab.calculator':'Calculator','tab.tips':'Tips','tab.alerts':'Alerts',
+  'nav.sections':'Sections','nav.profile':'Your profile','nav.lang':'Language', signout:'Sign out',
+  'ov.score':'Your credit score','ov.gauge':'Credit score {s} on a scale of 300 to 850','ov.delta':'{d} since last month · updated {date}',
+  'band.0':'Poor','band.1':'Fair','band.2':'Good','band.3':'Very good','band.4':'Excellent',
+  'ov.last12':'Last 12 months','ov.trend':'Score trend over the last 12 months, from {a} to {b}',
+  'ov.active':'Active loans','ov.balance':'Total balance','ov.monthly':'Monthly payments','ov.due':{one:'{lender}, due in {n} day',other:'{lender}, due in {n} days'},
+  'ov.affects':'What affects your score',
+  'f.history':'Payment history','f.attention':'Needs attention','f.strong':'Strong',
+  'f.historyBad':{one:'{n} payment is overdue. Paying it soon limits the damage.',other:'{n} payments are overdue. Paying them soon limits the damage.'},'f.historyGood':'No missed payments in the last 12 months.',
+  'f.card':'Credit card use','f.used':'{n}% used','f.cardD':'Staying under 30% of your limit helps your score.',
+  'f.checks':'Credit checks','f.hardN':{one:'{n} hard check',other:'{n} hard checks'},'f.checksD':'Each hard check can lower your score for a few months.',
+  'f.age':'Account age','f.ageV':'5 yrs 7 mo','f.ageD':'Your oldest account was opened in March 2021.',
+  'ov.note':'Demo with sample data. Scores, loans and lenders shown here are made up and are not connected to any credit bureau.',
+  'loan.L1':'Car loan','loan.L2':'Mortgage','loan.L3':'Consumer loan','loan.L4':'Credit card','loan.L5':'Phone installment',
+  'kind.Car':'Car','kind.Home':'Home','kind.Personal':'Personal','kind.Card':'Card',
+  'st.late':{one:'{n} day overdue',other:'{n} days overdue'},'st.closed':'Closed','st.ontime':'On time','ln.paidAria':'Paid off','ln.repaid':'{n}% repaid',
+  'ln.balance':'Balance','ln.monthly':'Monthly','ln.rate':'Rate','ln.closedOn':'Closed on','ln.next':'Next payment',
+  'rel.ago':{one:'{n} day ago',other:'{n} days ago'},'rel.today':'today','rel.in':{one:'in {n} day',other:'in {n} days'},
+  'ln.remind':'Remind me 3 days before','ln.markPaid':'Mark payment as paid','ln.filter':'Filter loans',
+  'chip.all':'All','chip.active':'Active','chip.late':'Overdue','chip.closed':'Closed','ln.none':'No loans match this filter.',
+  'ch.title':'Who looked at your credit report','ch.sub':'{n} checks in the last 12 months. {h} were hard checks, which can lower your score slightly. Soft checks have no effect.',
+  'ch.date':'Date','ch.who':'Institution','ch.reason':'Reason','ch.type':'Type','type.Hard':'Hard','type.Soft':'Soft',
+  'r.loanApp':'Loan application','r.preapproved':'Pre-approved offer','r.cardApp':'Card application','r.service':'Service contract','r.review':'Account review',
+  'g.G1':'You guaranteed','g.G2':'Guaranteed for you','person.G1':'Davit Grigoryan (brother)','person.G2':'Mariam Sargsyan (mother)',
+  'g.current':'Loan is current','g.lender':'Lender','g.amount':'Guaranteed amount','g.balance':'Remaining balance','g.since':'Since',
+  'g.note':'If a borrower you guaranteed misses payments, it can affect your score too.',
+  'al.title':'Alerts','al.readAll':'Mark all as read',
+  'al.A1.t':'Missed payment','al.A1.x':'Consumer loan at Inecobank was due on 5 Oct. {amt} is 5 days overdue.',
+  'al.A1p.t':'Payment received','al.A1p.x':'Consumer loan at Inecobank: the overdue payment is now marked as paid.',
+  'al.A2.t':'Payment due in 4 days','al.A2.x':'Car loan at Ameriabank: {amt} on 14 Oct.',
+  'al.A3.t':'New credit check','al.A3.x':'Converse Bank requested your credit report on 18 Sep.',
+  'al.A4.t':'Score went up 5 points','al.A4.x':'Your score is now 712, up from 707 last month.',
+  'al.A5.t':'Loan closed','al.A5.x':'Phone installment at Fast Bank is paid off.',
+  'c.title':'Loan calculator','c.amount':'Loan amount','c.period':'Loan period','c.years':'years','c.months':'months','c.unit':'Period unit',
+  'c.rate':'Interest rate (yearly)','c.method':'Repayment method','c.annuity':'Annuity','c.diff':'Differentiated',
+  'c.hintA':'The same payment every month. Early payments are mostly interest.',
+  'c.hintD':'You repay the same part of the loan each month, so payments start higher and get smaller. Less interest overall.',
+  'c.eAmount':'Enter an amount from {min} to {max} {cur}.','c.eYears':'Enter 1 to 40 years.','c.eMonths':'Enter 1 to 480 months.','c.eRate':'Enter a yearly rate from 0 to 100%.',
+  'c.fix':'Fix the highlighted fields to see your payments.','c.monthly':'Monthly payment',
+  'c.forN':{one:'for {n} month',other:'for {n} months'},'c.every':{one:'for {n} month',other:'every month for {n} months'},'c.falling':'in month 1, falling to {last} in month {n}',
+  'c.sLoan':'Loan amount','c.sInterest':'Total interest','c.sTotal':'Total to repay',
+  'c.split':'Of the total you repay, {a}% is the loan and {b}% is interest','c.lLoan':'Loan {n}%','c.lInt':'Interest {n}%',
+  'c.mA':'annuity','c.mD':'differentiated',
+  'c.costMore':'The {m} method would cost {amt} more in interest.',
+  'c.save':'The {m} method would save {amt} in interest, but its first payment would be {first}.',
+  'c.sched':'Payment schedule','c.thMonth':'Month','c.thPay':'Payment','c.thPrin':'Loan part','c.thInt':'Interest','c.thBal':'Balance left',
+  'c.first12':'Show first 12 months','c.all':'Show all {n} months','c.allCur':'All amounts in AMD.',
+  'c.note':'Estimate only. Banks may add fees, insurance or a different day count, so your actual payments can differ.',
+  'p.since':'Member since','p.consent':'Credit report consent','p.given':'Given {d}','p.reminders':'Payment reminders','p.ofLoans':{one:'{a} of {n} loan',other:'{a} of {n} loans'},
+  'p.where':'Data saved','p.inAcc':'In your account','p.inBrowser':'In this browser only',
+  'p.details':'Personal details','p.emailHint':'You sign in with this email, so it can\'t be changed here.',
+  'p.save':'Save changes','p.saving':'Saving…','p.saved':'Saved','p.saveErr':'Could not save: ',
+  'p.remTitle':'Reminders','p.remText':{one:'We remind you 3 days before a payment is due. Reminders are on for {a} of your {n} active loan.',other:'We remind you 3 days before a payment is due. Reminders are on for {a} of your {n} active loans.'},'p.manage':'Manage on the Loans tab',
+  'p.soDb':'You can sign in again with a code sent to your email.','p.soDemo':'Demo account: your details stay in this browser after you sign out.',
+  'fld.name':'Full name','fld.email':'Email','fld.phone':'Mobile number',
+  'tp.forYou':'Tips for you','tp.based':'Based on your loans, card use and credit checks.',
+  'tp.late':'Pay the overdue payment: {loan}, {lender}','tp.lateX':{one:'{amt} is {n} day overdue. Paying it now limits the damage to your score.',other:'{amt} is {n} days overdue. Paying it now limits the damage to your score.'},'tp.toLoans':'Go to Loans',
+  'tp.cardHigh':'Lower your credit card balance','tp.cardHighX':'You use {n}% of your card limit. Bringing it under 30% can raise your score.',
+  'tp.cardOk':'Your card use is healthy','tp.cardOkX':'You use {n}% of your limit. Keeping it under 30% helps your score.',
+  'tp.pause':'Pause new loan applications','tp.pauseX':'You had {n} hard credit checks in the last 12 months. Waiting a few months before the next application helps.','tp.toChecks':'See credit checks',
+  'tp.remOne':'Turn on reminders: {loan}','tp.remMany':'Turn on reminders for {n} loans','tp.remX':'You won\'t get a reminder before the due date.','tp.toRem':'Manage reminders',
+  'tp.noLate':'No overdue payments','tp.noLateX':'Keep paying on time. This is the most important thing for your score.',
+  'tp.note':'General information, not financial advice. Each bank and credit bureau may weigh things differently.',
+  tips:[
+    ['Payments',[
+      ['Pay every installment on time','Payment history has the biggest effect on your score. Even one payment more than 30 days late can stay on your credit report for years.'],
+      ['Turn on payment reminders','Reminders 3 days before the due date help you avoid late payments. You can switch them on for each loan on the Loans tab.'],
+      ['If you missed a payment, pay it as soon as possible','The longer a payment is overdue, the more it hurts your score. If you can\'t pay, contact the bank early and ask about rescheduling.']]],
+    ['Credit cards',[
+      ['Use less than 30% of your card limit','For example, with an 800,000 AMD limit, try to keep the balance under 240,000 AMD. Lower is better.'],
+      ['Pay the full card balance when you can','Paying only the minimum keeps your balance and interest high for longer.'],
+      ['Don\'t close your oldest card without a reason','Older accounts make your credit history longer, which helps your score.']]],
+    ['Credit checks',[
+      ['Avoid many loan applications in a short time','Each application usually triggers a hard check. Several hard checks close together can lower your score.'],
+      ['Compare offers before you apply','Use the loan calculator to compare payments and total interest first, then apply only where it makes sense.'],
+      ['Checking your own score does no harm','Looking at your own credit report is a soft check and does not affect your score.']]],
+    ['Loans and guarantees',[
+      ['Keep monthly payments affordable','A common rule is to keep all loan payments under 40% of your monthly income.'],
+      ['Be careful when you guarantee someone\'s loan','If the borrower misses payments, it can affect your score and you may have to pay.'],
+      ['Paying a loan off early saves interest','Check your contract for early repayment fees first. With a differentiated loan you pay less interest overall than with an annuity.']]]
+  ],
+  'a.demoDb':'Your name, email and phone are saved to your account. Scores and loans shown inside are sample data.',
+  'a.demo':'Demo only. Don\'t enter real details. Nothing is sent or stored on a server.',
+  'a.codeTitle':'Enter the code','a.sent':'We sent a 6-digit code to <b>{to}</b>.','a.code':'Verification code','a.inbox':'Check your inbox and spam folder.','a.demoCode':'Demo code:',
+  'a.verify':'Verify and create account','a.signin':'Sign in','a.checking':'Checking…','a.back':'Back',
+  'a.welcome':'Welcome back','a.welcomeLead':'Sign in with the email you registered with.','a.sendCode':'Send code','a.sending':'Sending…',
+  'a.new':'New here?','a.create':'Create an account','a.regTitle':'Create your account','a.regLead':'See your credit score, loans and payment dates in one place.',
+  'a.consent':'I agree that Score Up may request my credit report from the credit bureau. (Demo: no request is made.)',
+  'a.continue':'Continue','a.sendingCode':'Sending code…','a.have':'Already have an account?',
+  'e.name':'Enter your first and last name.','e.email':'Enter a valid email, like name@example.com.','e.phone':'Enter a phone number with 8 to 12 digits.',
+  'e.consent':'Please agree to continue.','e.noAcc':'No account found for this email. Create one first.','e.noAccLocal':'No account found for this email in this browser. Create one first.',
+  'e.codeBad':'That code is wrong or has expired. Check the latest email or go back and request a new one.','e.tooMany':'Too many attempts. Please wait a minute and try again.',
+  'e.generic':'Something went wrong: ','e.tryAgain':'please try again.','e.code6':'Enter the 6-digit code from the email.','e.demoCode':'That code is not right. Use the demo code shown below.',
+  'e.profileFail':'Your email is verified, but saving your profile failed: '
+},
+ru:{
+  cur:'֏', title:'Score Up',
+  'tab.overview':'Обзор','tab.loans':'Кредиты','tab.inquiries':'Запросы','tab.guarantees':'Поручительства','tab.calculator':'Калькулятор','tab.tips':'Советы','tab.alerts':'Уведомления',
+  'nav.sections':'Разделы','nav.profile':'Ваш профиль','nav.lang':'Язык', signout:'Выйти',
+  'ov.score':'Ваш кредитный рейтинг','ov.gauge':'Кредитный рейтинг {s} по шкале от 300 до 850','ov.delta':'{d} за месяц · обновлено {date}',
+  'band.0':'Плохой','band.1':'Средний','band.2':'Хороший','band.3':'Очень хороший','band.4':'Отличный',
+  'ov.last12':'Последние 12 месяцев','ov.trend':'Динамика рейтинга за 12 месяцев: от {a} до {b}',
+  'ov.active':'Активные кредиты','ov.balance':'Общий остаток','ov.monthly':'Платежи в месяц','ov.due':{one:'{lender}, платёж через {n} день',few:'{lender}, платёж через {n} дня',many:'{lender}, платёж через {n} дней',other:'{lender}, платёж через {n} дня'},
+  'ov.affects':'Что влияет на рейтинг',
+  'f.history':'История платежей','f.attention':'Требует внимания','f.strong':'Хорошая',
+  'f.historyBad':{one:'{n} платёж просрочен. Чем быстрее оплатите, тем меньше ущерб.',few:'{n} платежа просрочены. Чем быстрее оплатите, тем меньше ущерб.',many:'{n} платежей просрочены. Чем быстрее оплатите, тем меньше ущерб.',other:'Просроченных платежей: {n}.'},'f.historyGood':'За последние 12 месяцев пропущенных платежей нет.',
+  'f.card':'Использование кредитной карты','f.used':'использовано {n}%','f.cardD':'Использование менее 30% лимита помогает рейтингу.',
+  'f.checks':'Кредитные запросы','f.hardN':{one:'{n} жёсткий запрос',few:'{n} жёстких запроса',many:'{n} жёстких запросов',other:'{n} жёстких запроса'},'f.checksD':'Каждый жёсткий запрос может снизить рейтинг на несколько месяцев.',
+  'f.age':'Возраст кредитной истории','f.ageV':'5 лет 7 мес.','f.ageD':'Самый старый счёт открыт в марте 2021 года.',
+  'ov.note':'Демо-версия с примерными данными. Рейтинг, кредиты и кредиторы вымышлены и не связаны с кредитным бюро.',
+  'loan.L1':'Автокредит','loan.L2':'Ипотека','loan.L3':'Потребительский кредит','loan.L4':'Кредитная карта','loan.L5':'Рассрочка за телефон',
+  'kind.Car':'Авто','kind.Home':'Жильё','kind.Personal':'Личный','kind.Card':'Карта',
+  'st.late':{one:'просрочка {n} день',few:'просрочка {n} дня',many:'просрочка {n} дней',other:'просрочка {n} дня'},'st.closed':'Закрыт','st.ontime':'Без просрочек','ln.paidAria':'Погашено','ln.repaid':'погашено {n}%',
+  'ln.balance':'Остаток','ln.monthly':'В месяц','ln.rate':'Ставка','ln.closedOn':'Закрыт','ln.next':'Следующий платёж',
+  'rel.ago':{one:'{n} день назад',few:'{n} дня назад',many:'{n} дней назад',other:'{n} дня назад'},'rel.today':'сегодня','rel.in':{one:'через {n} день',few:'через {n} дня',many:'через {n} дней',other:'через {n} дня'},
+  'ln.remind':'Напомнить за 3 дня','ln.markPaid':'Отметить как оплаченный','ln.filter':'Фильтр кредитов',
+  'chip.all':'Все','chip.active':'Активные','chip.late':'Просроченные','chip.closed':'Закрытые','ln.none':'Нет кредитов по этому фильтру.',
+  'ch.title':'Кто запрашивал вашу кредитную историю','ch.sub':'Запросов за последние 12 месяцев: {n}. Из них жёстких: {h} — они могут немного снизить рейтинг. Мягкие запросы не влияют.',
+  'ch.date':'Дата','ch.who':'Организация','ch.reason':'Причина','ch.type':'Тип','type.Hard':'Жёсткий','type.Soft':'Мягкий',
+  'r.loanApp':'Заявка на кредит','r.preapproved':'Предодобренное предложение','r.cardApp':'Заявка на карту','r.service':'Договор на услуги','r.review':'Проверка счёта',
+  'g.G1':'Вы поручитель','g.G2':'Поручитель за вас','person.G1':'Давид Григорян (брат)','person.G2':'Мариам Саргсян (мать)',
+  'g.current':'Кредит обслуживается','g.lender':'Кредитор','g.amount':'Сумма поручительства','g.balance':'Остаток долга','g.since':'С',
+  'g.note':'Если заёмщик, за которого вы поручились, пропустит платежи, это может повлиять и на ваш рейтинг.',
+  'al.title':'Уведомления','al.readAll':'Отметить все как прочитанные',
+  'al.A1.t':'Пропущенный платёж','al.A1.x':'Платёж по потребительскому кредиту в Инекобанке был 5 октября. {amt} просрочено на 5 дней.',
+  'al.A1p.t':'Платёж получен','al.A1p.x':'Потребительский кредит в Инекобанке: просроченный платёж отмечен как оплаченный.',
+  'al.A2.t':'Платёж через 4 дня','al.A2.x':'Автокредит в Америабанке: {amt}, 14 октября.',
+  'al.A3.t':'Новый кредитный запрос','al.A3.x':'Конверс Банк запросил вашу кредитную историю 18 сентября.',
+  'al.A4.t':'Рейтинг вырос на 5 пунктов','al.A4.x':'Ваш рейтинг теперь 712, в прошлом месяце был 707.',
+  'al.A5.t':'Кредит закрыт','al.A5.x':'Рассрочка за телефон в Фаст Банке погашена.',
+  'c.title':'Кредитный калькулятор','c.amount':'Сумма кредита','c.period':'Срок кредита','c.years':'лет','c.months':'месяцев','c.unit':'Единица срока',
+  'c.rate':'Годовая ставка','c.method':'Способ погашения','c.annuity':'Аннуитетный','c.diff':'Дифференцированный',
+  'c.hintA':'Одинаковый платёж каждый месяц. В начале большая часть платежа — проценты.',
+  'c.hintD':'Каждый месяц гасится одинаковая часть долга, поэтому платежи сначала выше и постепенно снижаются. Переплата меньше.',
+  'c.eAmount':'Введите сумму от {min} до {max} {cur}.','c.eYears':'Введите от 1 до 40 лет.','c.eMonths':'Введите от 1 до 480 месяцев.','c.eRate':'Введите годовую ставку от 0 до 100%.',
+  'c.fix':'Исправьте выделенные поля, чтобы увидеть платежи.','c.monthly':'Ежемесячный платёж',
+  'c.forN':'срок: {n} мес.','c.every':'каждый месяц, срок: {n} мес.','c.falling':'в 1-й месяц, к {n}-му месяцу снижается до {last}',
+  'c.sLoan':'Сумма кредита','c.sInterest':'Всего процентов','c.sTotal':'Всего к выплате',
+  'c.split':'Из общей суммы {a}% — кредит, {b}% — проценты','c.lLoan':'Кредит {n}%','c.lInt':'Проценты {n}%',
+  'c.mA':'аннуитетном','c.mD':'дифференцированном',
+  'c.costMore':'При {m} способе переплата по процентам будет больше на {amt}.',
+  'c.save':'При {m} способе вы сэкономите {amt} на процентах, но первый платёж составит {first}.',
+  'c.sched':'График платежей','c.thMonth':'Месяц','c.thPay':'Платёж','c.thPrin':'Основной долг','c.thInt':'Проценты','c.thBal':'Остаток',
+  'c.first12':'Показать первые 12 месяцев','c.all':'Показать все месяцы ({n})','c.allCur':'Все суммы в драмах.',
+  'c.note':'Расчёт приблизительный. Банки могут добавлять комиссии, страховку или считать дни иначе, поэтому реальные платежи могут отличаться.',
+  'p.since':'С нами с','p.consent':'Согласие на запрос истории','p.given':'Дано {d}','p.reminders':'Напоминания о платежах','p.ofLoans':'{a} из {n}',
+  'p.where':'Где хранятся данные','p.inAcc':'В вашем аккаунте','p.inBrowser':'Только в этом браузере',
+  'p.details':'Личные данные','p.emailHint':'Вы входите с этой почтой, поэтому изменить её здесь нельзя.',
+  'p.save':'Сохранить','p.saving':'Сохранение…','p.saved':'Сохранено','p.saveErr':'Не удалось сохранить: ',
+  'p.remTitle':'Напоминания','p.remText':'Мы напоминаем за 3 дня до платежа. Напоминания включены для {a} из {n} активных кредитов.','p.manage':'Настроить во вкладке «Кредиты»',
+  'p.soDb':'Вы сможете снова войти по коду из письма.','p.soDemo':'Демо-аккаунт: ваши данные останутся в этом браузере после выхода.',
+  'fld.name':'Имя и фамилия','fld.email':'Эл. почта','fld.phone':'Мобильный телефон',
+  'tp.forYou':'Советы для вас','tp.based':'На основе ваших кредитов, карты и кредитных запросов.',
+  'tp.late':'Оплатите просрочку: {loan}, {lender}','tp.lateX':'Просрочено {amt}, дней просрочки: {n}. Оплатите сейчас, чтобы снизить ущерб рейтингу.','tp.toLoans':'Перейти к кредитам',
+  'tp.cardHigh':'Снизьте долг по кредитной карте','tp.cardHighX':'Вы используете {n}% лимита карты. Снижение ниже 30% может поднять рейтинг.',
+  'tp.cardOk':'С картой всё в порядке','tp.cardOkX':'Вы используете {n}% лимита. Держите ниже 30% — это помогает рейтингу.',
+  'tp.pause':'Повремените с новыми заявками','tp.pauseX':'Жёстких запросов за 12 месяцев: {n}. Лучше подождать несколько месяцев до следующей заявки.','tp.toChecks':'Смотреть запросы',
+  'tp.remOne':'Включите напоминания: {loan}','tp.remMany':'Включите напоминания для кредитов: {n}','tp.remX':'Вы не получите напоминание перед датой платежа.','tp.toRem':'Настроить напоминания',
+  'tp.noLate':'Просроченных платежей нет','tp.noLateX':'Продолжайте платить вовремя — это самое важное для рейтинга.',
+  'tp.note':'Общая информация, а не финансовая консультация. Банки и кредитные бюро могут оценивать факторы по-разному.',
+  tips:[
+    ['Платежи',[
+      ['Платите каждый взнос вовремя','История платежей сильнее всего влияет на рейтинг. Даже один платёж с просрочкой более 30 дней может годами оставаться в кредитной истории.'],
+      ['Включите напоминания о платежах','Напоминания за 3 дня до даты платежа помогают избежать просрочек. Их можно включить для каждого кредита во вкладке «Кредиты».'],
+      ['Если пропустили платёж, оплатите как можно скорее','Чем дольше просрочка, тем сильнее она вредит рейтингу. Если не можете платить, заранее обратитесь в банк и спросите о реструктуризации.']]],
+    ['Кредитные карты',[
+      ['Используйте меньше 30% лимита карты','Например, при лимите 800 000 ֏ старайтесь держать долг ниже 240 000 ֏. Чем меньше, тем лучше.'],
+      ['По возможности гасите весь долг по карте','Если платить только минимум, долг и проценты дольше остаются высокими.'],
+      ['Не закрывайте самую старую карту без причины','Старые счета удлиняют кредитную историю, а это помогает рейтингу.']]],
+    ['Кредитные запросы',[
+      ['Не подавайте много заявок за короткое время','Каждая заявка обычно вызывает жёсткий запрос. Несколько таких запросов подряд могут снизить рейтинг.'],
+      ['Сравнивайте предложения до подачи заявки','Сначала сравните платежи и переплату в кредитном калькуляторе, затем подавайте заявку только туда, где это выгодно.'],
+      ['Проверка своего рейтинга не вредит','Просмотр своей кредитной истории — мягкий запрос, он не влияет на рейтинг.']]],
+    ['Кредиты и поручительства',[
+      ['Держите платежи посильными','Распространённое правило: все платежи по кредитам — не больше 40% ежемесячного дохода.'],
+      ['Осторожно с поручительством','Если заёмщик пропустит платежи, это может повлиять на ваш рейтинг, и платить, возможно, придётся вам.'],
+      ['Досрочное погашение экономит проценты','Сначала проверьте в договоре комиссии за досрочное погашение. При дифференцированных платежах переплата в целом меньше, чем при аннуитетных.']]]
+  ],
+  'a.demoDb':'Ваше имя, почта и телефон сохраняются в аккаунте. Рейтинг и кредиты внутри — примерные данные.',
+  'a.demo':'Только демо. Не вводите реальные данные. Ничего не отправляется и не хранится на сервере.',
+  'a.codeTitle':'Введите код','a.sent':'Мы отправили 6-значный код на <b>{to}</b>.','a.code':'Код подтверждения','a.inbox':'Проверьте входящие и папку «Спам».','a.demoCode':'Демо-код:',
+  'a.verify':'Подтвердить и создать аккаунт','a.signin':'Войти','a.checking':'Проверка…','a.back':'Назад',
+  'a.welcome':'С возвращением','a.welcomeLead':'Войдите с почтой, указанной при регистрации.','a.sendCode':'Отправить код','a.sending':'Отправка…',
+  'a.new':'Впервые здесь?','a.create':'Создать аккаунт','a.regTitle':'Создайте аккаунт','a.regLead':'Кредитный рейтинг, кредиты и даты платежей в одном месте.',
+  'a.consent':'Я согласен(на), что Score Up может запросить мою кредитную историю в кредитном бюро. (Демо: запрос не выполняется.)',
+  'a.continue':'Продолжить','a.sendingCode':'Отправляем код…','a.have':'Уже есть аккаунт?',
+  'e.name':'Введите имя и фамилию.','e.email':'Введите корректную почту, например name@example.com.','e.phone':'Введите номер телефона из 8–12 цифр.',
+  'e.consent':'Чтобы продолжить, дайте согласие.','e.noAcc':'Аккаунт с этой почтой не найден. Сначала создайте его.','e.noAccLocal':'В этом браузере аккаунт с этой почтой не найден. Сначала создайте его.',
+  'e.codeBad':'Код неверный или устарел. Проверьте последнее письмо или вернитесь и запросите новый.','e.tooMany':'Слишком много попыток. Подождите минуту и попробуйте снова.',
+  'e.generic':'Что-то пошло не так: ','e.tryAgain':'попробуйте ещё раз.','e.code6':'Введите 6-значный код из письма.','e.demoCode':'Неверный код. Используйте демо-код ниже.',
+  'e.profileFail':'Почта подтверждена, но сохранить профиль не удалось: '
+}};
+const LENDERS={
+  'Ameriabank':{hy:'Ամերիաբանկ',ru:'Америабанк'},'Ardshinbank':{hy:'Արդշինբանկ',ru:'Ардшинбанк'},'Inecobank':{hy:'Ինեկոբանկ',ru:'Инекобанк'},
+  'ACBA Bank':{hy:'ԱԿԲԱ բանկ',ru:'АКБА Банк'},'Fast Bank':{hy:'Ֆասթ բանկ',ru:'Фаст Банк'},'Converse Bank':{hy:'Կոնվերս բանկ',ru:'Конверс Банк'},
+  'Evocabank':{hy:'Էվոկաբանկ',ru:'Эвокабанк'},'Ucom':{hy:'Յուքոմ',ru:'Ucom'}
+};
+const lender = n => (LENDERS[n]&&LENDERS[n][lang])||n;
+function t(key,vars={}){
+  let v=I18N[lang][key]; if(v===undefined) v=I18N.en[key]; if(v===undefined) return key;
+  if(typeof v==='object'&&!Array.isArray(v)){ const cat=new Intl.PluralRules(LOC()).select(Number(vars.n)); v=v[cat]||v.other; }
+  return typeof v==='string' ? v.replace(/\{(\w+)\}/g,(m,k)=>k in vars?vars[k]:m) : v;
+}
+function langSwitch(){
+  return `<div class="lang" role="group" aria-label="${esc(t('nav.lang'))}">${Object.entries(LANGS).map(([k,l])=>`<button type="button" data-lang="${k}" aria-pressed="${k===lang}" lang="${k}" title="${l.name}">${l.label}</button>`).join('')}</div>`;
+}
+function applyStatic(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));
+  const ls=$('#langSlot'); if(ls) ls.innerHTML=langSwitch();
+}
+
 /* ---------- Helpers ---------- */
 const $ = (s,r=document)=>r.querySelector(s);
-const amd = n => new Intl.NumberFormat('en-US').format(Math.round(n))+' AMD';
-const fmtDate = d => new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const HY_MON=['հնվ','փտվ','մրտ','ապր','մյս','հնս','հլս','օգս','սեպ','հոկ','նոյ','դեկ'];
+const nf = n => lang==='hy' ? new Intl.NumberFormat('en-US').format(Math.round(n)).replace(/,/g,'\u00a0') : new Intl.NumberFormat(LOC()).format(Math.round(n));
+const monShort = d => lang==='hy' ? HY_MON[new Date(d).getMonth()] : new Date(d).toLocaleDateString(LOC(),{month:'short'});
+const amd = n => nf(n)+' '+t('cur');
+const fmtDate = d => { const x=new Date(d); return lang==='hy' ? `${x.getDate()} ${HY_MON[x.getMonth()]} ${x.getFullYear()}` : x.toLocaleDateString(LOC(),{day:'numeric',month:'short',year:'numeric'}); };
 const daysUntil = d => Math.round((new Date(d)-TODAY)/864e5);
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const BANDS = [[300,579,'Poor','bad'],[580,669,'Fair','warn'],[670,739,'Good','good'],[740,799,'Very good','good'],[800,850,'Excellent','good']];
@@ -243,7 +632,7 @@ function markPaid(l,silent){
   l.paidNow=true; l.status='current'; l.daysLate=0;
   l.balance=Math.max(0,l.balance-l.monthly);
   const d=new Date(l.next); d.setMonth(d.getMonth()+1); l.next=d.toISOString().slice(0,10);
-  if(l.id==='L3'){ const a=ALERTS.find(x=>x.id==='A1'); if(a){a.read=true;a.title='Payment received';a.level='info';a.text='Consumer loan at Inecobank: the overdue payment is now marked as paid.';} }
+  if(l.id==='L3'){ const a=ALERTS.find(x=>x.id==='A1'); if(a){a.read=true;a.paid=true;a.level='info';} }
 }
 
 /* ---------- Score gauge & chart ---------- */
@@ -252,7 +641,7 @@ function gauge(score){
   const pt=(v,rad=r)=>{const a=Math.PI*(1-(v-min)/(max-min));return [cx+rad*Math.cos(a),cy-rad*Math.sin(a)];};
   const arc=(a,b)=>{const [x1,y1]=pt(a),[x2,y2]=pt(b);return `M${x1.toFixed(1)} ${y1.toFixed(1)} A${r} ${r} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`;};
   const [kx,ky]=pt(score);
-  return `<svg viewBox="0 0 300 160" role="img" aria-label="Credit score ${score} on a scale of 300 to 850">
+  return `<svg viewBox="0 0 300 160" role="img" aria-label="${esc(t('ov.gauge',{s:score}))}">
     <path d="${arc(min,max)}" stroke="var(--surface-2)" stroke-width="16" fill="none" stroke-linecap="round"/>
     <path d="${arc(min,score)}" stroke="var(--accent)" stroke-width="16" fill="none" stroke-linecap="round"/>
     <circle cx="${kx.toFixed(1)}" cy="${ky.toFixed(1)}" r="9" fill="var(--surface)" stroke="var(--accent)" stroke-width="4"/>
@@ -267,9 +656,9 @@ function trend(data){
   const line=data.map((d,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(d[1]).toFixed(1)}`).join(' ');
   const area=line+` L${x(data.length-1)} ${H-pb} L${x(0)} ${H-pb} Z`;
   const ticks=[650,680,710].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="3 4"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`).join('');
-  const mon=data.map((d,i)=>i%2===0||i===data.length-1?`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${new Date(d[0]+'-01').toLocaleDateString('en-GB',{month:'short'})}</text>`:'').join('');
+  const mon=data.map((d,i)=>i%2===0||i===data.length-1?`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${monShort(d[0]+'-01')}</text>`:'').join('');
   const last=data[data.length-1];
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Score trend over the last 12 months, from ${data[0][1]} to ${last[1]}">
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t('ov.trend',{a:data[0][1],b:last[1]}))}">
     ${ticks}
     <path d="${area}" fill="var(--accent)" opacity=".12"/>
     <path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
@@ -279,8 +668,9 @@ function trend(data){
 }
 
 /* ---------- Views ---------- */
+const REASON={'Loan application':'r.loanApp','Pre-approved offer':'r.preapproved','Card application':'r.cardApp','Service contract':'r.service','Account review':'r.review'};
 function viewOverview(){
-  const score=SCORE_HISTORY.at(-1)[1], prev=SCORE_HISTORY.at(-2)[1], diff=score-prev, band=bandOf(score);
+  const score=SCORE_HISTORY.at(-1)[1], prev=SCORE_HISTORY.at(-2)[1], diff=score-prev, band=bandOf(score), bi=BANDS.indexOf(band);
   const active=LOANS.filter(l=>l.status!=='closed');
   const debt=active.reduce((s,l)=>s+l.balance,0), monthly=active.reduce((s,l)=>s+l.monthly,0);
   const upcoming=active.filter(l=>l.next&&l.status!=='late').sort((a,b)=>a.next.localeCompare(b.next))[0];
@@ -288,103 +678,304 @@ function viewOverview(){
   const hard=CHECKS.filter(c=>c.type==='Hard'&&daysUntil(c.date)>-365).length;
   const cardUse=Math.round(LOANS.find(l=>l.kind==='Card').balance/800000*100);
   const factors=[
-    ['Payment history', late.length?['bad','Needs attention']:['good','Strong'], late.length?`${late.length} payment is overdue. Paying it soon limits the damage.`:'No missed payments in the last 12 months.'],
-    ['Credit card use', cardUse<30?['good',cardUse+'% used']:['warn',cardUse+'% used'], 'Staying under 30% of your limit helps your score.'],
-    ['Credit checks', hard>2?['warn',hard+' hard checks']:['good',hard+' hard checks'], 'Each hard check can lower your score for a few months.'],
-    ['Account age', ['good','5 yrs 7 mo'], 'Your oldest account was opened in March 2021.']
+    [t('f.history'), late.length?['bad',t('f.attention')]:['good',t('f.strong')], late.length?t('f.historyBad',{n:late.length}):t('f.historyGood')],
+    [t('f.card'), [cardUse<30?'good':'warn',t('f.used',{n:cardUse})], t('f.cardD')],
+    [t('f.checks'), [hard>2?'warn':'good',t('f.hardN',{n:hard})], t('f.checksD')],
+    [t('f.age'), ['good',t('f.ageV')], t('f.ageD')]
   ];
+  const dHtml=diff>=0?`<b>+${diff}</b>`:`<b style="color:var(--bad)">${diff}</b>`;
   return `<div class="grid hero">
-    <section class="panel gauge" aria-label="Your credit score">
-      <div class="eyebrow">Your credit score</div>
+    <section class="panel gauge" aria-label="${esc(t('ov.score'))}">
+      <div class="eyebrow">${t('ov.score')}</div>
       ${gauge(score)}
       <div class="score num" style="margin-top:-62px">${score}</div>
-      <span class="band" style="${band[3]==='warn'?'background:var(--warn-soft);color:var(--warn)':band[3]==='bad'?'background:var(--bad-soft);color:var(--bad)':''}">${band[2]}</span>
-      <div class="delta">${diff>=0?`<b>+${diff}</b>`:`<b style="color:var(--bad)">${diff}</b>`} since last month · updated ${fmtDate(TODAY)}</div>
+      <span class="band" style="${band[3]==='warn'?'background:var(--warn-soft);color:var(--warn)':band[3]==='bad'?'background:var(--bad-soft);color:var(--bad)':''}">${t('band.'+bi)}</span>
+      <div class="delta">${t('ov.delta',{d:dHtml,date:fmtDate(TODAY)})}</div>
       <div class="scale" aria-hidden="true"><i style="background:var(--bad)"></i><i style="background:var(--warn)"></i><i style="background:var(--good);opacity:.6"></i><i style="background:var(--good);opacity:.8"></i><i style="background:var(--good)"></i></div>
-      <div class="scale-l"><span>Poor</span><span>Fair</span><span>Good</span><span>Very good</span><span>Excellent</span></div>
+      <div class="scale-l">${[0,1,2,3,4].map(i=>`<span>${t('band.'+i)}</span>`).join('')}</div>
     </section>
     <section class="panel">
-      <h2>Last 12 months</h2>
+      <h2>${t('ov.last12')}</h2>
       ${trend(SCORE_HISTORY)}
       <div class="stats">
-        <div class="stat"><span class="v num">${active.length}</span><span class="l">Active loans</span></div>
-        <div class="stat"><span class="v num">${amd(debt).replace(' AMD','')}</span><span class="l">Total balance, AMD</span></div>
-        <div class="stat"><span class="v num">${amd(monthly).replace(' AMD','')}</span><span class="l">Monthly payments, AMD</span></div>
+        <div class="stat"><span class="v num">${active.length}</span><span class="l">${t('ov.active')}</span></div>
+        <div class="stat"><span class="v num">${nf(debt)}</span><span class="l">${t('ov.balance')}, ${t('cur')}</span></div>
+        <div class="stat"><span class="v num">${nf(monthly)}</span><span class="l">${t('ov.monthly')}, ${t('cur')}</span></div>
       </div>
-      ${upcoming?`<div class="next"><div class="d num">${new Date(upcoming.next).getDate()}<small>${new Date(upcoming.next).toLocaleDateString('en-GB',{month:'short'})}</small></div><p><b>${esc(upcoming.name)} · ${amd(upcoming.monthly)}</b><br>${esc(upcoming.lender)}, due in ${daysUntil(upcoming.next)} days</p></div>`:''}
+      ${upcoming?`<div class="next"><div class="d num">${new Date(upcoming.next).getDate()}<small>${monShort(upcoming.next)}</small></div><p><b>${esc(t('loan.'+upcoming.id))} · ${amd(upcoming.monthly)}</b><br>${t('ov.due',{lender:esc(lender(upcoming.lender)),n:daysUntil(upcoming.next)})}</p></div>`:''}
     </section>
   </div>
   <section class="panel" style="margin-top:16px">
-    <h2>What affects your score</h2>
+    <h2>${t('ov.affects')}</h2>
     ${factors.map(f=>`<div class="factor"><span class="t">${f[0]}</span><span class="pill ${f[1][0]}">${f[1][1]}</span><span class="d">${f[2]}</span></div>`).join('')}
   </section>
-  <p class="note">Demo with sample data. Scores, loans and lenders shown here are made up and are not connected to any credit bureau.</p>`;
+  <p class="note">${t('ov.note')}</p>`;
 }
 
 function loanCard(l){
   const paid = l.original? Math.round((1-l.balance/l.original)*100):0;
-  const st = l.status==='late'?`<span class="pill bad">${l.daysLate} days overdue</span>`:l.status==='closed'?`<span class="pill mute">Closed</span>`:`<span class="pill good">On time</span>`;
+  const st = l.status==='late'?`<span class="pill bad">${t('st.late',{n:l.daysLate})}</span>`:l.status==='closed'?`<span class="pill mute">${t('st.closed')}</span>`:`<span class="pill good">${t('st.ontime')}</span>`;
   const d = l.next?daysUntil(l.next):null;
+  const rel = d!==null&&l.status!=='closed' ? ` <span class="sub">(${d<0?t('rel.ago',{n:-d}):d===0?t('rel.today'):t('rel.in',{n:d})})</span>` : '';
   return `<article class="loan ${l.status==='late'?'late':''}" data-id="${l.id}">
-    <div class="row"><div><h3>${esc(l.name)}</h3><div class="sub">${esc(l.lender)} · ${l.kind}</div></div>${st}</div>
-    ${l.status!=='closed'?`<div><div class="meter" role="progressbar" aria-valuenow="${paid}" aria-valuemin="0" aria-valuemax="100" aria-label="Paid off"><i style="width:${paid}%"></i></div><div class="sub" style="margin-top:4px">${paid}% repaid</div></div>`:''}
+    <div class="row"><div><h3>${esc(t('loan.'+l.id))}</h3><div class="sub">${esc(lender(l.lender))} · ${t('kind.'+l.kind)}</div></div>${st}</div>
+    ${l.status!=='closed'?`<div><div class="meter" role="progressbar" aria-valuenow="${paid}" aria-valuemin="0" aria-valuemax="100" aria-label="${esc(t('ln.paidAria'))}"><i style="width:${paid}%"></i></div><div class="sub" style="margin-top:4px">${t('ln.repaid',{n:paid})}</div></div>`:''}
     <div class="kv">
-      <div><span class="l">Balance</span><span class="v num">${amd(l.balance)}</span></div>
-      <div><span class="l">Monthly</span><span class="v num">${l.monthly?amd(l.monthly):'-'}</span></div>
-      <div><span class="l">Rate</span><span class="v num">${l.rate?l.rate+'%':'-'}</span></div>
-      <div><span class="l">${l.status==='closed'?'Closed on':'Next payment'}</span><span class="v">${l.status==='closed'?fmtDate(l.end):fmtDate(l.next)}${d!==null&&l.status!=='closed'?` <span class="sub">(${d<0?-d+' days ago':d===0?'today':'in '+d+' days'})</span>`:''}</span></div>
+      <div><span class="l">${t('ln.balance')}</span><span class="v num">${amd(l.balance)}</span></div>
+      <div><span class="l">${t('ln.monthly')}</span><span class="v num">${l.monthly?amd(l.monthly):'-'}</span></div>
+      <div><span class="l">${t('ln.rate')}</span><span class="v num">${l.rate?l.rate+'%':'-'}</span></div>
+      <div><span class="l">${l.status==='closed'?t('ln.closedOn'):t('ln.next')}</span><span class="v">${l.status==='closed'?fmtDate(l.end):fmtDate(l.next)}${rel}</span></div>
     </div>
     ${l.status!=='closed'?`<div class="actions">
-      <label class="sw"><input type="checkbox" data-remind="${l.id}" ${l.remind?'checked':''}><span class="t"></span>Remind me 3 days before</label>
-      ${l.status==='late'?`<button class="btn primary" data-pay="${l.id}">Mark payment as paid</button>`:''}
+      <label class="sw"><input type="checkbox" data-remind="${l.id}" ${l.remind?'checked':''}><span class="t"></span>${t('ln.remind')}</label>
+      ${l.status==='late'?`<button class="btn primary" data-pay="${l.id}">${t('ln.markPaid')}</button>`:''}
     </div>`:''}
   </article>`;
 }
 function viewLoans(){
   const f=state.loanFilter;
   const list=LOANS.filter(l=>f==='all'?true:f==='active'?l.status!=='closed':f==='late'?l.status==='late':l.status==='closed');
-  const chips=[['all','All'],['active','Active'],['late','Overdue'],['closed','Closed']];
-  return `<div class="toolbar" role="group" aria-label="Filter loans">${chips.map(c=>`<button class="chip" data-filter="${c[0]}" aria-pressed="${f===c[0]}">${c[1]}</button>`).join('')}</div>
-  <div class="list">${list.length?list.map(loanCard).join(''):'<div class="panel empty">No loans match this filter.</div>'}</div>`;
+  const chips=['all','active','late','closed'];
+  return `<div class="toolbar" role="group" aria-label="${esc(t('ln.filter'))}">${chips.map(c=>`<button class="chip" data-filter="${c}" aria-pressed="${f===c}">${t('chip.'+c)}</button>`).join('')}</div>
+  <div class="list">${list.length?list.map(loanCard).join(''):`<div class="panel empty">${t('ln.none')}</div>`}</div>`;
 }
 function viewChecks(){
   const hard=CHECKS.filter(c=>c.type==='Hard').length;
   return `<section class="panel">
-    <h2>Who looked at your credit report</h2>
-    <p class="sub" style="margin:0 0 14px">${CHECKS.length} checks in the last 12 months. ${hard} were hard checks, which can lower your score slightly. Soft checks have no effect.</p>
-    <div class="tbl"><table><thead><tr><th>Date</th><th>Institution</th><th>Reason</th><th>Type</th></tr></thead><tbody>
-    ${CHECKS.map(c=>`<tr><td class="num">${fmtDate(c.date)}</td><td><b>${esc(c.who)}</b></td><td>${esc(c.reason)}</td><td><span class="pill ${c.type==='Hard'?'warn':'mute'}">${c.type}</span></td></tr>`).join('')}
+    <h2>${t('ch.title')}</h2>
+    <p class="sub" style="margin:0 0 14px">${t('ch.sub',{n:CHECKS.length,h:hard})}</p>
+    <div class="tbl"><table><thead><tr><th>${t('ch.date')}</th><th>${t('ch.who')}</th><th>${t('ch.reason')}</th><th>${t('ch.type')}</th></tr></thead><tbody>
+    ${CHECKS.map(c=>`<tr><td class="num">${fmtDate(c.date)}</td><td><b>${esc(lender(c.who))}</b></td><td>${t(REASON[c.reason])}</td><td><span class="pill ${c.type==='Hard'?'warn':'mute'}">${t('type.'+c.type)}</span></td></tr>`).join('')}
     </tbody></table></div>
   </section>`;
 }
 function viewGuarantees(){
   return `<div class="list">${GUARANTEES.map(g=>`<article class="loan">
-    <div class="row"><div><h3>${esc(g.role)}</h3><div class="sub">${esc(g.person)}</div></div><span class="pill good">Loan is current</span></div>
+    <div class="row"><div><h3>${t('g.'+g.id)}</h3><div class="sub">${esc(t('person.'+g.id))}</div></div><span class="pill good">${t('g.current')}</span></div>
     <div class="kv">
-      <div><span class="l">Lender</span><span class="v">${esc(g.lender)}</span></div>
-      <div><span class="l">Guaranteed amount</span><span class="v num">${amd(g.amount)}</span></div>
-      <div><span class="l">Remaining balance</span><span class="v num">${amd(g.balance)}</span></div>
-      <div><span class="l">Since</span><span class="v">${fmtDate(g.since)}</span></div>
+      <div><span class="l">${t('g.lender')}</span><span class="v">${esc(lender(g.lender))}</span></div>
+      <div><span class="l">${t('g.amount')}</span><span class="v num">${amd(g.amount)}</span></div>
+      <div><span class="l">${t('g.balance')}</span><span class="v num">${amd(g.balance)}</span></div>
+      <div><span class="l">${t('g.since')}</span><span class="v">${fmtDate(g.since)}</span></div>
     </div></article>`).join('')}</div>
-    <p class="note">If a borrower you guaranteed misses payments, it can affect your score too.</p>`;
+    <p class="note">${t('g.note')}</p>`;
 }
 function viewAlerts(){
   const unread=ALERTS.filter(a=>!a.read).length;
   return `<section class="panel">
-    <div class="row" style="margin-bottom:6px"><h2>Alerts</h2>${unread?`<button class="btn" data-readall>Mark all as read</button>`:''}</div>
-    ${ALERTS.sort((a,b)=>b.when.localeCompare(a.when)).map(a=>`<div class="alert ${a.read?'read':''}"><span class="dot ${a.level}"></span><div><b>${esc(a.title)}</b><p class="sub">${esc(a.text)}</p></div><span class="sub num">${fmtDate(a.when)}</span></div>`).join('')}
+    <div class="row" style="margin-bottom:6px"><h2>${t('al.title')}</h2>${unread?`<button class="btn" data-readall>${t('al.readAll')}</button>`:''}</div>
+    ${ALERTS.sort((a,b)=>b.when.localeCompare(a.when)).map(a=>{ const k=a.id==='A1'&&a.paid?'A1p':a.id; return `<div class="alert ${a.read?'read':''}"><span class="dot ${a.level}"></span><div><b>${t('al.'+k+'.t')}</b><p class="sub">${t('al.'+k+'.x',{amt:amd(a.id==='A1'?96000:148000)})}</p></div><span class="sub num">${fmtDate(a.when)}</span></div>`; }).join('')}
   </section>`;
 }
 
+/* ---------- Loan calculator ----------
+   Annuity: equal monthly payment A = P·r / (1 − (1+r)^−n).
+   Differentiated: equal principal P/n each month plus interest on the remaining balance. */
+let calc={amount:5000000,period:3,unit:'years',rate:14,method:'annuity',showAll:false};
+function schedule(P,n,rate,method){
+  const r=rate/100/12, rows=[]; let bal=P;
+  const A = r ? P*r/(1-Math.pow(1+r,-n)) : P/n;
+  for(let m=1;m<=n;m++){
+    const interest=bal*r;
+    let principal = method==='annuity' ? A-interest : P/n;
+    if(m===n) principal=bal;
+    bal=Math.max(0,bal-principal);
+    rows.push({m,payment:principal+interest,principal,interest,bal});
+  }
+  const interest=rows.reduce((s,x)=>s+x.interest,0);
+  return {rows,interest,total:P+interest};
+}
+function calcInputs(){
+  const P=calc.amount, n=calc.unit==='years'?Math.round(calc.period*12):Math.round(calc.period), e={};
+  if(!(P>=10000&&P<=1e10)) e.amount=t('c.eAmount',{min:nf(10000),max:nf(1e10),cur:t('cur')});
+  if(!(n>=1&&n<=480)) e.period=calc.unit==='years'?t('c.eYears'):t('c.eMonths');
+  if(!(calc.rate>=0&&calc.rate<=100)) e.rate=t('c.eRate');
+  return {P,n,e};
+}
+function viewCalc(){
+  const c=calc;
+  return `<div class="calc">
+    <section class="panel">
+      <h2>${t('c.title')}</h2>
+      <form id="calcForm" novalidate>
+        <div class="field"><label for="c-amount">${t('c.amount')}</label>
+          <div class="affix"><input id="c-amount" data-calc="amount" inputmode="numeric" autocomplete="off" value="${nf(c.amount)}" aria-describedby="c-amount-e"><span>${t('cur')}</span></div>
+          <span class="err" id="c-amount-e"></span></div>
+        <div class="field"><label for="c-period">${t('c.period')}</label>
+          <div class="combo"><input id="c-period" data-calc="period" type="number" inputmode="decimal" min="1" step="1" value="${c.period}" aria-describedby="c-period-e">
+          <select data-calc="unit" aria-label="${esc(t('c.unit'))}"><option value="years" ${c.unit==='years'?'selected':''}>${t('c.years')}</option><option value="months" ${c.unit==='months'?'selected':''}>${t('c.months')}</option></select></div>
+          <span class="err" id="c-period-e"></span></div>
+        <div class="field"><label for="c-rate">${t('c.rate')}</label>
+          <div class="affix"><input id="c-rate" data-calc="rate" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="${c.rate}" aria-describedby="c-rate-e"><span>%</span></div>
+          <span class="err" id="c-rate-e"></span></div>
+        <fieldset class="seg-wrap"><legend>${t('c.method')}</legend><div class="seg">
+          <label><input type="radio" name="method" value="annuity" data-calc="method" ${c.method==='annuity'?'checked':''}>${t('c.annuity')}</label>
+          <label><input type="radio" name="method" value="diff" data-calc="method" ${c.method==='diff'?'checked':''}>${t('c.diff')}</label>
+        </div></fieldset>
+        <p class="hint" id="methodHint"></p>
+      </form>
+    </section>
+    <div id="calcOut" aria-live="polite"></div>
+  </div>
+  <p class="note">${t('c.note')}</p>`;
+}
+function updateCalc(){
+  const out=$('#calcOut'); if(!out) return;
+  const {P,n,e}=calcInputs();
+  ['amount','period','rate'].forEach(k=>{const el=$('#c-'+k+'-e'); if(el) el.textContent=e[k]||''; const f=$('#c-'+k); if(f){f.setAttribute('aria-invalid',!!e[k]); f.closest('.field').classList.toggle('bad',!!e[k]);}});
+  $('#methodHint').textContent = calc.method==='annuity' ? t('c.hintA') : t('c.hintD');
+  if(Object.keys(e).length){ out.innerHTML=`<section class="panel empty">${t('c.fix')}</section>`; return; }
+  const res=schedule(P,n,calc.rate,calc.method), other=schedule(P,n,calc.rate,calc.method==='annuity'?'diff':'annuity');
+  const first=res.rows[0].payment, last=res.rows.at(-1).payment, ip=res.total?res.interest/res.total*100:0;
+  const saving=other.interest-res.interest, otherName=t(calc.method==='annuity'?'c.mD':'c.mA');
+  const sub = calc.method==='annuity' ? t('c.forN',{n}) : (Math.round(first)===Math.round(last) ? t('c.every',{n}) : t('c.falling',{n,last:`<b class="num">${amd(last)}</b>`}));
+  const headline=`<div class="eyebrow">${t('c.monthly')}</div><div class="big num">${amd(first)}</div><div class="sub">${sub}</div>`;
+  const rows=calc.showAll||n<=12?res.rows:res.rows.slice(0,12);
+  out.innerHTML=`<section class="panel">
+      ${headline}
+      <div class="stats">
+        <div class="stat"><span class="v num">${nf(P)}</span><span class="l">${t('c.sLoan')}, ${t('cur')}</span></div>
+        <div class="stat"><span class="v num">${nf(res.interest)}</span><span class="l">${t('c.sInterest')}, ${t('cur')}</span></div>
+        <div class="stat"><span class="v num">${nf(res.total)}</span><span class="l">${t('c.sTotal')}, ${t('cur')}</span></div>
+      </div>
+      <div class="split" role="img" aria-label="${esc(t('c.split',{a:Math.round(100-ip),b:Math.round(ip)}))}"><i style="width:${100-ip}%;background:var(--ink-2)"></i><i style="width:${ip}%;background:var(--accent)"></i></div>
+      <div class="legend"><span style="--c:var(--ink-2)">${t('c.lLoan',{n:Math.round(100-ip)})}</span><span style="--c:var(--accent)">${t('c.lInt',{n:Math.round(ip)})}</span></div>
+      ${calc.rate>0&&n>1?`<div class="compare">${saving>0
+        ? t('c.costMore',{m:otherName,amt:`<b class="num">${amd(saving)}</b>`})
+        : t('c.save',{m:otherName,amt:`<b class="num">${amd(-saving)}</b>`,first:`<b class="num">${amd(other.rows[0].payment)}</b>`})}</div>`:''}
+    </section>
+    <section class="panel" style="margin-top:16px">
+      <h2>${t('c.sched')}</h2>
+      <div class="tbl"><table class="sched"><thead><tr><th>${t('c.thMonth')}</th><th>${t('c.thPay')}</th><th>${t('c.thPrin')}</th><th>${t('c.thInt')}</th><th>${t('c.thBal')}</th></tr></thead><tbody>
+      ${rows.map(x=>`<tr><td class="num">${x.m}</td><td class="num"><b>${nf(x.payment)}</b></td><td class="num">${nf(x.principal)}</td><td class="num">${nf(x.interest)}</td><td class="num">${nf(x.bal)}</td></tr>`).join('')}
+      </tbody></table></div>
+      ${n>12?`<div class="swap" style="margin-top:12px"><button class="btn" type="button" data-calc-all>${calc.showAll?t('c.first12'):t('c.all',{n})}</button></div>`:''}
+      <p class="sub" style="margin:10px 0 0">${t('c.allCur')}</p>
+    </section>`;
+}
+function onCalcInput(el){
+  const k=el.dataset.calc;
+  if(k==='amount') calc.amount=Number(el.value.replace(/[^\d.]/g,''))||0;
+  else if(k==='period'||k==='rate') calc[k]=el.value===''?NaN:Number(el.value);
+  else if(k==='unit'){
+    const months=calc.unit==='years'?calc.period*12:calc.period;
+    calc.unit=el.value; calc.period=calc.unit==='years'?Math.round(months/12*10)/10:Math.round(months);
+    const p=$('#c-period'); if(p) p.value=calc.period;
+  }
+  else if(k==='method') calc.method=el.value;
+  updateCalc();
+}
+document.addEventListener('input',e=>{ const el=e.target.closest('[data-calc]'); if(el&&el.type!=='radio'&&el.tagName!=='SELECT') onCalcInput(el); });
+document.addEventListener('change',e=>{ const el=e.target.closest('[data-calc]'); if(el&&(el.type==='radio'||el.tagName==='SELECT')) onCalcInput(el); });
+document.addEventListener('focusout',e=>{ if(e.target.id==='c-amount'&&calc.amount) e.target.value=nf(calc.amount); });
+document.addEventListener('submit',e=>{ if(e.target.id==='calcForm'){ e.preventDefault(); e.stopImmediatePropagation(); } },true);
+document.addEventListener('click',e=>{ if(e.target.closest('[data-calc-all]')){ calc.showAll=!calc.showAll; updateCalc(); } });
+
+/* ---------- Profile ---------- */
+let prof={errors:{},saved:false,busy:false};
+function viewProfile(){
+  const u=user, e=prof.errors, active=LOANS.filter(l=>l.status!=='closed'), on=active.filter(l=>l.remind).length;
+  const f=(id,label,val,err,extra='')=>`<div class="field ${err?'bad':''}"><label for="${id}">${label}</label><input id="${id}" value="${esc(val||'')}" ${extra} aria-invalid="${!!err}" aria-describedby="${id}-e"><span class="err" id="${id}-e">${err?esc(err):''}</span></div>`;
+  return `<div class="prof">
+    <section class="panel idcard">
+      <span class="avatar lg" aria-hidden="true">${esc(initials(u.name))}</span>
+      <h2>${esc(u.name)}</h2>
+      <div class="sub">${esc(u.email)}</div>
+      <dl class="facts">
+        <div><dt>${t('p.since')}</dt><dd>${u.since?fmtDate(u.since):'-'}</dd></div>
+        <div><dt>${t('p.consent')}</dt><dd>${u.consent?t('p.given',{d:fmtDate(u.consent)}):'-'}</dd></div>
+        <div><dt>${t('p.reminders')}</dt><dd>${t('p.ofLoans',{a:on,n:active.length})}</dd></div>
+        <div><dt>${t('p.where')}</dt><dd>${sb?t('p.inAcc'):t('p.inBrowser')}</dd></div>
+      </dl>
+    </section>
+    <div class="grid">
+      <section class="panel">
+        <h2>${t('p.details')}</h2>
+        <form id="profileForm" novalidate>
+          ${f('p-name',t('fld.name'),u.name,e.name,'autocomplete="name"')}
+          ${f('p-email',t('fld.email'),u.email,null,'type="email" readonly')}
+          <p class="hint" style="margin-top:-8px">${t('p.emailHint')}</p>
+          ${f('p-phone',t('fld.phone'),u.phone,e.phone,'type="tel" autocomplete="tel" placeholder="+374 XX XXX XXX"')}
+          ${e.form?`<div class="field bad"><span class="err" role="alert">${esc(e.form)}</span></div>`:''}
+          <div class="formrow"><button class="btn primary" type="submit" ${prof.busy?'disabled':''}>${prof.busy?t('p.saving'):t('p.save')}</button>${prof.saved?`<span class="saved" role="status">${t('p.saved')}</span>`:''}</div>
+        </form>
+      </section>
+      <section class="panel">
+        <h2>${t('p.remTitle')}</h2>
+        <p class="sub" style="margin:0 0 12px">${t('p.remText',{a:on,n:active.length})}</p>
+        <button class="btn" data-tab="loans">${t('p.manage')}</button>
+      </section>
+      <section class="panel">
+        <h2>${t('signout')}</h2>
+        <p class="sub" style="margin:0 0 12px">${sb?t('p.soDb'):t('p.soDemo')}</p>
+        <button class="btn" data-signout>${t('signout')}</button>
+      </section>
+    </div>
+  </div>`;
+}
+document.addEventListener('submit',async ev=>{
+  if(ev.target.id!=='profileForm') return;
+  ev.preventDefault(); ev.stopImmediatePropagation();
+  if(prof.busy) return;
+  const name=$('#p-name').value.trim(), phone=$('#p-phone').value.trim(), e={};
+  if(name.split(/\s+/).filter(Boolean).length<2) e.name=t('e.name');
+  if(!phoneOk(phone)) e.phone=t('e.phone');
+  prof={errors:e,saved:false,busy:false};
+  if(Object.keys(e).length){ render(); return; }
+  prof.busy=true; render();
+  if(sb){
+    const {error}=await sb.from('profiles').update({full_name:name,phone}).eq('id',user.id);
+    if(error){ prof={errors:{form:t('p.saveErr')+error.message},saved:false,busy:false}; render(); return; }
+  }
+  user={...user,name,phone};
+  if(!sb){ try{localStorage.setItem('scoreup-user',JSON.stringify(user));}catch(_){} }
+  prof={errors:{},saved:true,busy:false};
+  $('#userName').textContent=user.name; $('#userAvatar').textContent=initials(user.name);
+  render();
+},true);
+
+/* ---------- Tips ---------- */
+function personalTips(){
+  const out=[], active=LOANS.filter(l=>l.status!=='closed');
+  const late=active.filter(l=>l.status==='late');
+  late.forEach(l=>out.push(['bad','!',t('tp.late',{loan:t('loan.'+l.id),lender:lender(l.lender)}),t('tp.lateX',{amt:amd(l.monthly),n:l.daysLate}),'loans',t('tp.toLoans')]));
+  const card=LOANS.find(l=>l.kind==='Card'&&l.status!=='closed');
+  if(card){ const use=Math.round(card.balance/card.original*100);
+    if(use>=30) out.push(['warn','%',t('tp.cardHigh'),t('tp.cardHighX',{n:use})]);
+    else out.push(['good','✓',t('tp.cardOk'),t('tp.cardOkX',{n:use})]); }
+  const hard=CHECKS.filter(c=>c.type==='Hard'&&daysUntil(c.date)>-365).length;
+  if(hard>2) out.push(['warn','?',t('tp.pause'),t('tp.pauseX',{n:hard}),'inquiries',t('tp.toChecks')]);
+  const off=active.filter(l=>!l.remind);
+  if(off.length) out.push(['info','⏰',off.length===1?t('tp.remOne',{loan:t('loan.'+off[0].id)}):t('tp.remMany',{n:off.length}),t('tp.remX'),'loans',t('tp.toRem')]);
+  if(!late.length) out.push(['good','✓',t('tp.noLate'),t('tp.noLateX')]);
+  return out;
+}
+function viewTips(){
+  const col={bad:['var(--bad)','var(--bad-soft)'],warn:['var(--warn)','var(--warn-soft)'],good:['var(--good)','var(--good-soft)'],info:['var(--ink-2)','var(--surface-2)']};
+  return `<section class="panel">
+    <h2>${t('tp.forYou')}</h2>
+    <p class="sub" style="margin:0 0 14px">${t('tp.based')}</p>
+    <div class="tip-you">${personalTips().map(x=>`<div class="tip-card" style="--c:${col[x[0]][0]};--cs:${col[x[0]][1]}">
+      <span class="ic" aria-hidden="true">${x[1]}</span><b>${esc(x[2])}</b><p>${esc(x[3])}</p>
+      ${x[4]?`<button class="btn" data-tab="${x[4]}">${esc(x[5])}</button>`:''}</div>`).join('')}</div>
+  </section>
+  ${t('tips').map(([g,items])=>`<section class="panel tip-group"><h2>${esc(g)}</h2>
+    ${items.map(([q,a])=>`<details class="tip"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}
+  </section>`).join('')}
+  <p class="note">${t('tp.note')}</p>`;
+}
+
 /* ---------- Render & events ---------- */
-const VIEWS={overview:viewOverview,loans:viewLoans,inquiries:viewChecks,guarantees:viewGuarantees,alerts:viewAlerts};
+const VIEWS={overview:viewOverview,loans:viewLoans,inquiries:viewChecks,guarantees:viewGuarantees,calculator:viewCalc,tips:viewTips,alerts:viewAlerts,profile:viewProfile};
 function render(){
   $('#view').innerHTML=VIEWS[state.tab]();
+  if(state.tab==='calculator') updateCalc();
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.tab===state.tab));
+  const me=$('.me'); if(me){ if(state.tab==='profile') me.setAttribute('aria-current','page'); else me.removeAttribute('aria-current'); }
   const u=ALERTS.filter(a=>!a.read).length, b=$('#alertBadge'); b.hidden=!u; b.textContent=u;
 }
 document.addEventListener('click',e=>{
-  const t=e.target.closest('[data-tab]'); if(t){state.tab=t.dataset.tab; try{history.replaceState(null,'','#'+state.tab)}catch(_){} render(); window.scrollTo(0,0); return;}
+  const t=e.target.closest('[data-tab]'); if(t){state.tab=t.dataset.tab; prof={errors:{},saved:false,busy:false}; try{history.replaceState(null,'','#'+state.tab)}catch(_){} render(); window.scrollTo(0,0); return;}
   const f=e.target.closest('[data-filter]'); if(f){state.loanFilter=f.dataset.filter; render(); return;}
   const p=e.target.closest('[data-pay]'); if(p){markPaid(LOANS.find(l=>l.id===p.dataset.pay)); persist(); render(); return;}
   if(e.target.closest('[data-readall]')){ALERTS.forEach(a=>a.read=true); persist(); render();}
@@ -409,48 +1000,47 @@ function submitBtn(label,busyLabel){
 }
 function authView(){
   const a=auth, f=a.form, e=a.errors;
-  const demo=sb
-    ? `<div class="demo">Your name, email and phone are saved to your account. Scores and loans shown inside are sample data.</div>`
-    : `<div class="demo">Demo only. Don't enter real details. Nothing is sent or stored on a server.</div>`;
+  const demo=`<div class="demo">${sb?t('a.demoDb'):t('a.demo')}</div>`;
   const formErr=e.form?`<div class="field bad"><span class="err" role="alert">${esc(e.form)}</span></div>`:'';
+  const top=`<div class="lang-top">${langSwitch()}</div>`;
   const brand=`<div class="brand"><div class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 12l4-4 3 3 5-6" stroke="#ff8a4c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Score Up</div>`;
   if(a.step===2){
     const to=sb||a.mode!=='register'?f.email:f.phone;
-    return `<div class="auth-card">${brand}
+    return `<div class="auth-card">${top}${brand}
       ${a.mode==='register'?`<div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div>`:''}
-      <h1>Enter the code</h1>
-      <p class="lead">We sent a 6-digit code to <b>${esc(to)}</b>.</p>
+      <h1>${t('a.codeTitle')}</h1>
+      <p class="lead">${t('a.sent',{to:esc(to)})}</p>
       ${demo}
       <form id="codeForm" novalidate>
-        ${field('code','Verification code','text','',e.code,'inputmode="numeric" maxlength="6" autocomplete="one-time-code" class="codebox" placeholder="······"')}
-        ${sb?`<p class="sub" style="margin:-4px 0 14px">Check your inbox and spam folder.</p>`:`<p class="sub" style="margin:-4px 0 14px">Demo code: <b class="num">${DEMO_CODE}</b></p>`}
+        ${field('code',t('a.code'),'text','',e.code,'inputmode="numeric" maxlength="6" autocomplete="one-time-code" class="codebox" placeholder="······"')}
+        ${sb?`<p class="sub" style="margin:-4px 0 14px">${t('a.inbox')}</p>`:`<p class="sub" style="margin:-4px 0 14px">${t('a.demoCode')} <b class="num">${DEMO_CODE}</b></p>`}
         ${formErr}
-        ${submitBtn(a.mode==='register'?'Verify and create account':'Sign in','Checking…')}
-        <div class="swap"><button type="button" data-auth-back>Back</button></div>
+        ${submitBtn(a.mode==='register'?t('a.verify'):t('a.signin'),t('a.checking'))}
+        <div class="swap"><button type="button" data-auth-back>${t('a.back')}</button></div>
       </form></div>`;
   }
   if(a.mode==='login'){
-    return `<div class="auth-card">${brand}
-      <h1>Welcome back</h1><p class="lead">Sign in with the email you registered with.</p>${demo}
+    return `<div class="auth-card">${top}${brand}
+      <h1>${t('a.welcome')}</h1><p class="lead">${t('a.welcomeLead')}</p>${demo}
       <form id="loginForm" novalidate>
-        ${field('email','Email','email',f.email,e.email,'autocomplete="email"')}
+        ${field('email',t('fld.email'),'email',f.email,e.email,'autocomplete="email"')}
         ${formErr}
-        ${submitBtn('Send code','Sending…')}
-        <div class="swap">New here? <button type="button" data-auth-mode="register">Create an account</button></div>
+        ${submitBtn(t('a.sendCode'),t('a.sending'))}
+        <div class="swap">${t('a.new')} <button type="button" data-auth-mode="register">${t('a.create')}</button></div>
       </form></div>`;
   }
-  return `<div class="auth-card">${brand}
+  return `<div class="auth-card">${top}${brand}
     <div class="steps" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
-    <h1>Create your account</h1><p class="lead">See your credit score, loans and payment dates in one place.</p>${demo}
+    <h1>${t('a.regTitle')}</h1><p class="lead">${t('a.regLead')}</p>${demo}
     <form id="regForm" novalidate>
-      ${field('name','Full name','text',f.name,e.name,'autocomplete="name"')}
-      ${field('email','Email','email',f.email,e.email,'autocomplete="email"')}
-      ${field('phone','Mobile number','tel',f.phone,e.phone,'autocomplete="tel" placeholder="+374 XX XXX XXX"')}
-      <label class="check"><input type="checkbox" id="consent" ${f.consent?'checked':''}><span>I agree that Score Up may request my credit report from the credit bureau. (Demo: no request is made.)</span></label>
+      ${field('name',t('fld.name'),'text',f.name,e.name,'autocomplete="name"')}
+      ${field('email',t('fld.email'),'email',f.email,e.email,'autocomplete="email"')}
+      ${field('phone',t('fld.phone'),'tel',f.phone,e.phone,'autocomplete="tel" placeholder="+374 XX XXX XXX"')}
+      <label class="check"><input type="checkbox" id="consent" ${f.consent?'checked':''}><span>${t('a.consent')}</span></label>
       ${e.consent?`<div class="field bad" style="margin-top:-8px"><span class="err">${esc(e.consent)}</span></div>`:''}
       ${formErr}
-      ${submitBtn('Continue','Sending code…')}
-      <div class="swap">Already have an account? <button type="button" data-auth-mode="login">Sign in</button></div>
+      ${submitBtn(t('a.continue'),t('a.sendingCode'))}
+      <div class="swap">${t('a.have')} <button type="button" data-auth-mode="login">${t('a.signin')}</button></div>
     </form></div>`;
 }
 function showApp(){
@@ -458,7 +1048,7 @@ function showApp(){
   $('#auth').hidden=signedIn; $('#appHeader').hidden=!signedIn; $('#view').hidden=!signedIn;
   if(signedIn){
     $('#userName').textContent=user.name; $('#userAvatar').textContent=initials(user.name);
-    render();
+    applyStatic(); render();
   } else {
     $('#auth').innerHTML=authView();
     const first=$('#auth input:not([type=checkbox])'); if(first&&auth.focus!==false) first.focus();
@@ -472,29 +1062,29 @@ const emailOk = s => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
 const phoneOk = s => s.replace(/[\s()-]/g,'').match(/^\+?\d{8,12}$/);
 function validateReg(f){
   const e={};
-  if(f.name.split(/\s+/).filter(Boolean).length<2) e.name='Enter your first and last name.';
-  if(!emailOk(f.email)) e.email='Enter a valid email, like name@example.com.';
-  if(!phoneOk(f.phone)) e.phone='Enter a phone number with 8 to 12 digits.';
-  if(!f.consent) e.consent='Please agree to continue.';
+  if(f.name.split(/\s+/).filter(Boolean).length<2) e.name=t('e.name');
+  if(!emailOk(f.email)) e.email=t('e.email');
+  if(!phoneOk(f.phone)) e.phone=t('e.phone');
+  if(!f.consent) e.consent=t('e.consent');
   return e;
 }
 
 /* Database helpers */
 function friendly(err){
   const m=(err&&err.message)||'';
-  if(/signups not allowed|user not found/i.test(m)) return {email:'No account found for this email. Create one first.'};
-  if(/expired|invalid/i.test(m)) return {code:'That code is wrong or has expired. Check the latest email or go back and request a new one.'};
-  if(/rate limit|security purposes|too many/i.test(m)) return {form:'Too many attempts. Please wait a minute and try again.'};
-  return {form:'Something went wrong: '+(m||'please try again.')};
+  if(/signups not allowed|user not found/i.test(m)) return {email:t('e.noAcc')};
+  if(/expired|invalid/i.test(m)) return {code:t('e.codeBad')};
+  if(/rate limit|security purposes|too many/i.test(m)) return {form:t('e.tooMany')};
+  return {form:t('e.generic')+(m||t('e.tryAgain'))};
 }
 async function loadUser(session){
   const u=session.user;
   const [{data:prof},{data:st}]=await Promise.all([
-    sb.from('profiles').select('full_name').eq('id',u.id).maybeSingle(),
+    sb.from('profiles').select('full_name,phone,consent_at,created_at').eq('id',u.id).maybeSingle(),
     sb.from('user_state').select('reminders,paid_loans,read_alerts').eq('user_id',u.id).maybeSingle()
   ]);
   if(st) applyPrefs({remind:st.reminders,paid:st.paid_loans,read:st.read_alerts});
-  return {id:u.id,email:u.email,name:(prof&&prof.full_name)||u.email.split('@')[0]};
+  return {id:u.id,email:u.email,name:(prof&&prof.full_name)||u.email.split('@')[0],phone:(prof&&prof.phone)||'',consent:prof&&prof.consent_at,since:(prof&&prof.created_at)||u.created_at};
 }
 function sendCode(email,createUser){
   return sb.auth.signInWithOtp({email,options:{shouldCreateUser:createUser}});
@@ -508,26 +1098,27 @@ async function handleSubmit(id){
     if(sb){ const {error}=await sendCode(auth.form.email,true); if(error){auth.errors=friendly(error); return;} }
     auth.step=2;
   } else if(id==='loginForm'){
-    if(!emailOk(auth.form.email)){ auth.errors={email:'Enter a valid email, like name@example.com.'}; return; }
+    if(!emailOk(auth.form.email)){ auth.errors={email:t('e.email')}; return; }
     if(sb){ const {error}=await sendCode(auth.form.email,false); if(error){auth.errors=friendly(error); return;} auth.errors={}; auth.step=2; return; }
     let saved=null; try{saved=JSON.parse(localStorage.getItem('scoreup-user')||'null');}catch(_){}
-    if(!saved||saved.email.toLowerCase()!==auth.form.email.toLowerCase()) auth.errors={email:'No account found for this email in this browser. Create one first.'};
+    if(!saved||saved.email.toLowerCase()!==auth.form.email.toLowerCase()) auth.errors={email:t('e.noAccLocal')};
     else {auth.errors={}; auth.pending=saved; auth.step=2;}
   } else if(id==='codeForm'){
     const v=auth.code||'';
     if(sb){
-      if(!/^\d{6}$/.test(v)){ auth.errors={code:'Enter the 6-digit code from the email.'}; return; }
+      if(!/^\d{6}$/.test(v)){ auth.errors={code:t('e.code6')}; return; }
       const {data,error}=await sb.auth.verifyOtp({email:auth.form.email,token:v,type:'email'});
       if(error){ auth.errors=friendly(error); return; }
       if(auth.mode==='register'){
         const f=auth.form;
         const {error:pErr}=await sb.from('profiles').upsert({id:data.user.id,full_name:f.name,email:f.email,phone:f.phone,consent_at:new Date().toISOString()});
-        if(pErr){ auth.errors={form:'Your email is verified, but saving your profile failed: '+pErr.message}; return; }
+        if(pErr){ auth.errors={form:t('e.profileFail')+pErr.message}; return; }
       }
       user=await loadUser(data.session);
     } else {
-      if(v!==DEMO_CODE){ auth.errors={code:'That code is not right. Use the demo code shown below.'}; return; }
-      user = auth.mode==='register' ? {name:auth.form.name,email:auth.form.email} : auth.pending;
+      if(v!==DEMO_CODE){ auth.errors={code:t('e.demoCode')}; return; }
+      const now=new Date().toISOString();
+      user = auth.mode==='register' ? {name:auth.form.name,email:auth.form.email,phone:auth.form.phone,consent:now,since:now} : auth.pending;
       try{localStorage.setItem('scoreup-user',JSON.stringify(user));}catch(_){}
     }
     auth={mode:'register',step:1,form:{name:'',email:'',phone:''},errors:{}};
@@ -540,8 +1131,14 @@ document.addEventListener('submit',async ev=>{
   const codeEl=$('#code'); auth.code=codeEl?codeEl.value.trim():'';
   auth.busy=true; auth.errors={}; readForm(); showApp();
   try{ await handleSubmit(ev.target.id); }
-  catch(err){ auth.errors={form:'Something went wrong: '+(err.message||err)}; }
+  catch(err){ auth.errors={form:t('e.generic')+(err.message||err)}; }
   auth.busy=false; showApp(); if(user) window.scrollTo(0,0);
+});
+document.addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-lang]'); if(!b||!LANGS[b.dataset.lang]) return;
+  if(!user) readForm();
+  lang=b.dataset.lang; try{ localStorage.setItem('scoreup-lang',lang); }catch(_){}
+  auth.errors={}; prof.errors={}; prof.saved=false; applyStatic(); showApp();
 });
 document.addEventListener('click',async ev=>{
   const m=ev.target.closest('[data-auth-mode]');
@@ -554,6 +1151,7 @@ document.addEventListener('click',async ev=>{
 });
 
 const h=location.hash.slice(1); if(VIEWS[h]) state.tab=h;
+applyStatic();
 if(sb){
   sb.auth.getSession().then(async ({data})=>{
     if(data.session){ try{ user=await loadUser(data.session); }catch(e){ console.error(e); } }

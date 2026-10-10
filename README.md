@@ -1,6 +1,6 @@
 # Score Up Web
 
-A web version of a personal credit score app: score gauge, 12-month trend, loans, credit checks, guarantees and alerts.
+A web version of a personal credit score app: score gauge, 12-month trend, loans, credit checks, guarantees, alerts, a loan calculator (annuity or differentiated repayment), credit tips and a profile page. The interface is in Armenian (default), English and Russian; the choice is remembered in the browser (`scoreup-lang`).
 
 Scores, loans, checks, guarantees and alerts are sample data; no real credit bureau is connected.
 
