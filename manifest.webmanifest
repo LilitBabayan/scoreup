@@ -1,0 +1,23 @@
+{
+  "id": "./",
+  "name": "Score Up – վարկային սքոր",
+  "short_name": "Score Up",
+  "description": "Վարկային սքոր, վարկեր, հաշվիչ և բանկերի համեմատություն մեկ տեղում։",
+  "lang": "hy",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1526",
+  "theme_color": "#14213d",
+  "categories": ["finance"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Հաշվիչ", "url": "./#calculator", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Համեմատել", "url": "./#compare", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

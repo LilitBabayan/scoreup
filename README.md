@@ -22,6 +22,14 @@ The **Compare** tab ranks sample bank offers for an amount, period and loan type
 
 If `SUPABASE_URL` and `SUPABASE_KEY` are empty, the app runs in demo mode: the code is always `123456` and everything is kept in the browser's local storage.
 
+## Install as an app (PWA)
+
+The site is an installable web app: `manifest.webmanifest` and `icons/` make it installable, and `sw.js` (service worker) caches the app so it opens offline. Pages are fetched network-first, so a new deploy shows up as soon as the user is online; icons, fonts and the Supabase library are served from cache and refreshed in the background. API calls to Supabase are never cached. If you change the list of cached files in `sw.js`, bump `CACHE`.
+
+- Android / desktop Chrome: an **Install** button appears under Profile (and in the browser menu).
+- iPhone: Safari > Share > Add to Home Screen (Profile shows these steps).
+- Push notifications are not included; they need a server and push keys.
+
 ## Run locally
 
 Open `index.html` in a browser, or serve the folder:
