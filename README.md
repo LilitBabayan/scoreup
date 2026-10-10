@@ -16,6 +16,10 @@ Sign-up sends a real 6-digit code by email and saves each user's profile (name, 
 
 Supabase's built-in email sender allows only a few emails per hour. For real users, add your own SMTP provider under **Authentication > Emails > SMTP Settings**.
 
+### Bank comparison and applications
+
+The **Compare** tab ranks sample bank offers for an amount, period and loan type, and each card has an **Apply** button. An application (contact details, monthly income, employment, the chosen offer) is saved to the `applications` table, or to the browser in demo mode, and listed under **Profile > My applications**. **It is not sent to the bank.** The offers in `OFFERS` are made-up sample rates; real submissions and real rates need agreements and data feeds with the banks.
+
 If `SUPABASE_URL` and `SUPABASE_KEY` are empty, the app runs in demo mode: the code is always `123456` and everything is kept in the browser's local storage.
 
 ## Run locally

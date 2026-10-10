@@ -39,3 +39,31 @@ create policy "Own state: insert" on public.user_state for insert to authenticat
 create policy "Own state: update" on public.user_state for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 grant select, insert, update on public.profiles, public.user_state to authenticated;
+
+-- Loan applications started from the Compare tab.
+-- Saved only: nothing is forwarded to the bank until a bank integration exists.
+create table if not exists public.applications (
+  id              uuid primary key default gen_random_uuid(),
+  user_id         uuid not null references auth.users (id) on delete cascade,
+  applicant_name  text not null check (char_length(applicant_name) between 2 and 120),
+  phone           text not null check (char_length(phone) between 8 and 20),
+  bank            text not null,
+  loan_type       text not null check (loan_type in ('consumer','car','mortgage')),
+  amount          numeric not null check (amount > 0),
+  months          int not null check (months between 1 and 480),
+  rate            numeric not null check (rate >= 0 and rate <= 100),
+  method          text not null check (method in ('annuity','diff')),
+  monthly_income  numeric not null check (monthly_income > 0),
+  employment      text not null check (employment in ('employed','self','other')),
+  status          text not null default 'submitted' check (status in ('submitted')),
+  created_at      timestamptz not null default now()
+);
+
+alter table public.applications enable row level security;
+
+drop policy if exists "Own applications: read"   on public.applications;
+drop policy if exists "Own applications: insert" on public.applications;
+create policy "Own applications: read"   on public.applications for select to authenticated using (auth.uid() = user_id);
+create policy "Own applications: insert" on public.applications for insert to authenticated with check (auth.uid() = user_id);
+
+grant select, insert on public.applications to authenticated;

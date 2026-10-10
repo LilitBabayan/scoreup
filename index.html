@@ -195,6 +195,15 @@ details.tip summary::after{content:"+";color:var(--ink-3);font-weight:400;font-s
 details.tip[open] summary::after{content:"−"}
 details.tip ul{margin:0 0 12px;padding-left:20px;color:var(--ink-2);font-size:14px}
 details.tip li{margin-bottom:6px}
+.appr{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.appr:first-of-type{border-top:0}
+.appr .r{text-align:right;display:grid;gap:4px;justify-items:end}
+dialog.ap{border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);padding:22px;width:min(480px,calc(100vw - 32px));max-height:calc(100vh - 32px);overflow:auto}
+dialog.ap::backdrop{background:rgb(10 16 30/.55)}
+dialog.ap h2{font-size:20px;margin-bottom:10px}
+dialog.ap .field select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+.apsum{background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink-2);margin-bottom:12px}
+.apsum b{color:var(--ink)}
 .lang{display:inline-flex;gap:2px;background:var(--surface-2);border-radius:99px;padding:2px}
 .lang button{border:0;background:none;border-radius:99px;padding:3px 9px;font-size:12px;font-weight:600;color:var(--ink-2)}
 .lang button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0/.15)}
@@ -228,12 +237,15 @@ details.tip li{margin-bottom:6px}
     <button class="tab" role="tab" data-tab="inquiries" aria-selected="false" data-i18n="tab.inquiries"></button>
     <button class="tab" role="tab" data-tab="guarantees" aria-selected="false" data-i18n="tab.guarantees"></button>
     <button class="tab" role="tab" data-tab="calculator" aria-selected="false" data-i18n="tab.calculator"></button>
+    <button class="tab" role="tab" data-tab="compare" aria-selected="false" data-i18n="tab.compare"></button>
     <button class="tab" role="tab" data-tab="tips" aria-selected="false" data-i18n="tab.tips"></button>
     <button class="tab" role="tab" data-tab="alerts" aria-selected="false"><span data-i18n="tab.alerts"></span> <span class="badge" id="alertBadge" hidden>0</span></button>
   </nav>
 </header>
 
 <main class="wrap" id="view" hidden></main>
+
+<dialog class="ap" id="applyDlg"></dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
 <script>
@@ -287,7 +299,7 @@ const LOC=()=>LANGS[lang].loc;
 const I18N={
 hy:{
   cur:'֏', title:'Score Up',
-  'tab.overview':'Գլխավոր','tab.loans':'Վարկեր','tab.inquiries':'Հարցումներ','tab.guarantees':'Երաշխավորություններ','tab.calculator':'Հաշվիչ','tab.tips':'Խորհուրդներ','tab.alerts':'Ծանուցումներ',
+  'tab.overview':'Գլխավոր','tab.loans':'Վարկեր','tab.inquiries':'Հարցումներ','tab.guarantees':'Երաշխավորություններ','tab.calculator':'Հաշվիչ','tab.compare':'Համեմատել','tab.tips':'Խորհուրդներ','tab.alerts':'Ծանուցումներ',
   'nav.sections':'Բաժիններ','nav.profile':'Ձեր պրոֆիլը','nav.lang':'Լեզու', signout:'Դուրս գալ',
   'ov.score':'Ձեր վարկային սքորը','ov.gauge':'Վարկային սքոր՝ {s}, 300-ից 850 սանդղակով','ov.delta':'{d} նախորդ ամսվա համեմատ · թարմացվել է {date}',
   'band.0':'Վատ','band.1':'Միջին','band.2':'Լավ','band.3':'Շատ լավ','band.4':'Գերազանց',
@@ -335,6 +347,18 @@ hy:{
   'c.sched':'Վճարումների ժամանակացույց','c.thMonth':'Ամիս','c.thPay':'Վճարում','c.thPrin':'Մայր գումար','c.thInt':'Տոկոս','c.thBal':'Մնացորդ',
   'c.first12':'Ցույց տալ առաջին 12 ամիսը','c.all':'Ցույց տալ բոլոր {n} ամիսները','c.allCur':'Բոլոր գումարները դրամով են։',
   'c.note':'Մոտավոր հաշվարկ է։ Բանկերը կարող են ավելացնել միջնորդավճարներ, ապահովագրություն կամ օրերը այլ կերպ հաշվել, ուստի իրական վճարումները կարող են տարբերվել։',
+  'cm.title':'Բանկերի վարկերի համեմատություն','cm.type':'Վարկի տեսակ','cm.consumer':'Սպառողական վարկ','cm.car':'Ավտովարկ','cm.mortgage':'Հիփոթեք',
+  'cm.sort':'Դասավորել','cm.sCost':'Ընդհանուր արժեքով','cm.sPay':'Ամսական վճարով','cm.sRate':'Տոկոսադրույքով','cm.best':'Ամենաէժանը',
+  'cm.rateLine':'{rate}% տարեկան','cm.feeLine':'միանվագ վճար՝ {fee}%','cm.firstMonth':'1-ին ամսում','cm.interest':'Տոկոսներ','cm.fee':'Միանվագ վճար','cm.total':'Ընդհանուր արժեք',
+  'cm.more':'{amt}-ով ավելի թանկ է, քան ամենաէժանը','cm.hidden':'{n} բանկ չի առաջարկում այս գումարը կամ ժամկետը։','cm.none':'Այս գումարի և ժամկետի համար առաջարկներ չկան։',
+  'cm.fix':'Ուղղեք նշված դաշտերը՝ առաջարկները տեսնելու համար։',
+  'cm.note':'Տոկոսադրույքները օրինակային են և իրական առաջարկներ չեն։ Ճշգրիտ պայմանների համար դիմեք բանկին։ Ընդհանուր արժեքը ներառում է միանվագ վճարը։',
+  'ap.btn':'Դիմել','ap.applied':'Դիմումը պահպանված է ✓','ap.title':'Դիմում՝ {bank}','ap.income':'Ամսական եկամուտ','ap.emp':'Զբաղվածություն','ap.emp.employed':'Աշխատում եմ (վարձու)','ap.emp.self':'Ինքնազբաղված','ap.emp.other':'Այլ',
+  'ap.consent':'Համաձայն եմ, որ իմ տվյալները փոխանցվեն բանկին՝ վարկի դիմումը քննարկելու համար։','ap.submit':'Ուղարկել դիմումը','ap.sending':'Պահպանվում է…','ap.cancel':'Չեղարկել',
+  'ap.noteDb':'Ցուցադրական տարբերակ․ դիմումը պահպանվում է ձեր հաշվում, բայց դեռ չի ուղարկվում բանկին։','ap.noteLocal':'Ցուցադրական տարբերակ․ դիմումը պահպանվում է միայն այս բրաուզերում և չի ուղարկվում բանկին։',
+  'ap.done':'Դիմումը պահպանվեց','ap.doneText':'Ձեր դիմումը պահպանված է ({bank})։ Այն դեռ չի ուղարկվել բանկին (ցուցադրական տարբերակ)։','ap.ref':'Համար','ap.close':'Փակել',
+  'ap.eIncome':'Մուտքագրեք ամսական եկամուտը ({cur}), առնվազն {min}։','ap.eConsent':'Շարունակելու համար տվեք համաձայնությունը։','ap.saveErr':'Չհաջողվեց պահպանել՝ ',
+  'ap.mine':'Իմ դիմումները','ap.none':'Դեռ դիմումներ չկան։ Դիմեք «Համեմատել» բաժնից։','ap.status.submitted':'Պահպանված',
   'p.since':'Գրանցման ամսաթիվ','p.consent':'Համաձայնություն հարցման համար','p.given':'Տրված է {d}','p.reminders':'Վճարման հիշեցումներ','p.ofLoans':'{a}՝ {n} վարկից',
   'p.where':'Տվյալների պահպանում','p.inAcc':'Ձեր հաշվում','p.inBrowser':'Միայն այս բրաուզերում',
   'p.details':'Անձնական տվյալներ','p.emailHint':'Դուք մուտք եք գործում այս էլ. փոստով, ուստի այն այստեղ փոխել հնարավոր չէ։',
@@ -397,7 +421,7 @@ hy:{
 },
 en:{
   cur:'AMD', title:'Score Up',
-  'tab.overview':'Overview','tab.loans':'Loans','tab.inquiries':'Credit checks','tab.guarantees':'Guarantees','tab.calculator':'Calculator','tab.tips':'Tips','tab.alerts':'Alerts',
+  'tab.overview':'Overview','tab.loans':'Loans','tab.inquiries':'Credit checks','tab.guarantees':'Guarantees','tab.calculator':'Calculator','tab.compare':'Compare','tab.tips':'Tips','tab.alerts':'Alerts',
   'nav.sections':'Sections','nav.profile':'Your profile','nav.lang':'Language', signout:'Sign out',
   'ov.score':'Your credit score','ov.gauge':'Credit score {s} on a scale of 300 to 850','ov.delta':'{d} since last month · updated {date}',
   'band.0':'Poor','band.1':'Fair','band.2':'Good','band.3':'Very good','band.4':'Excellent',
@@ -445,6 +469,18 @@ en:{
   'c.sched':'Payment schedule','c.thMonth':'Month','c.thPay':'Payment','c.thPrin':'Loan part','c.thInt':'Interest','c.thBal':'Balance left',
   'c.first12':'Show first 12 months','c.all':'Show all {n} months','c.allCur':'All amounts in AMD.',
   'c.note':'Estimate only. Banks may add fees, insurance or a different day count, so your actual payments can differ.',
+  'cm.title':'Compare bank loans','cm.type':'Loan type','cm.consumer':'Consumer loan','cm.car':'Car loan','cm.mortgage':'Mortgage',
+  'cm.sort':'Sort by','cm.sCost':'Total cost','cm.sPay':'Monthly payment','cm.sRate':'Interest rate','cm.best':'Cheapest',
+  'cm.rateLine':'{rate}% a year','cm.feeLine':'one-time fee {fee}%','cm.firstMonth':'in month 1','cm.interest':'Interest','cm.fee':'One-time fee','cm.total':'Total cost',
+  'cm.more':'{amt} more than the cheapest','cm.hidden':{one:'{n} bank does not offer this amount or period.',other:'{n} banks do not offer this amount or period.'},'cm.none':'No offers for this amount and period.',
+  'cm.fix':'Fix the highlighted fields to see the offers.',
+  'cm.note':'Rates are samples, not real offers. Contact the bank for exact terms. Total cost includes the one-time fee.',
+  'ap.btn':'Apply','ap.applied':'Application saved ✓','ap.title':'Apply to {bank}','ap.income':'Monthly income','ap.emp':'Employment','ap.emp.employed':'Employed','ap.emp.self':'Self-employed','ap.emp.other':'Other',
+  'ap.consent':'I agree that my details are shared with the bank to review my loan application.','ap.submit':'Submit application','ap.sending':'Saving…','ap.cancel':'Cancel',
+  'ap.noteDb':'Demo: your application is saved in your account but is not sent to the bank yet.','ap.noteLocal':'Demo: your application is saved only in this browser and is not sent to the bank.',
+  'ap.done':'Application saved','ap.doneText':'Your application is saved ({bank}). It has not been sent to the bank yet (demo).','ap.ref':'Reference','ap.close':'Close',
+  'ap.eIncome':'Enter your monthly income in {cur}, at least {min}.','ap.eConsent':'Please agree to continue.','ap.saveErr':'Could not save: ',
+  'ap.mine':'My applications','ap.none':'No applications yet. Apply from the Compare tab.','ap.status.submitted':'Saved',
   'p.since':'Member since','p.consent':'Credit report consent','p.given':'Given {d}','p.reminders':'Payment reminders','p.ofLoans':{one:'{a} of {n} loan',other:'{a} of {n} loans'},
   'p.where':'Data saved','p.inAcc':'In your account','p.inBrowser':'In this browser only',
   'p.details':'Personal details','p.emailHint':'You sign in with this email, so it can\'t be changed here.',
@@ -507,7 +543,7 @@ en:{
 },
 ru:{
   cur:'֏', title:'Score Up',
-  'tab.overview':'Обзор','tab.loans':'Кредиты','tab.inquiries':'Запросы','tab.guarantees':'Поручительства','tab.calculator':'Калькулятор','tab.tips':'Советы','tab.alerts':'Уведомления',
+  'tab.overview':'Обзор','tab.loans':'Кредиты','tab.inquiries':'Запросы','tab.guarantees':'Поручительства','tab.calculator':'Калькулятор','tab.compare':'Сравнение','tab.tips':'Советы','tab.alerts':'Уведомления',
   'nav.sections':'Разделы','nav.profile':'Ваш профиль','nav.lang':'Язык', signout:'Выйти',
   'ov.score':'Ваш кредитный рейтинг','ov.gauge':'Кредитный рейтинг {s} по шкале от 300 до 850','ov.delta':'{d} за месяц · обновлено {date}',
   'band.0':'Плохой','band.1':'Средний','band.2':'Хороший','band.3':'Очень хороший','band.4':'Отличный',
@@ -555,6 +591,18 @@ ru:{
   'c.sched':'График платежей','c.thMonth':'Месяц','c.thPay':'Платёж','c.thPrin':'Основной долг','c.thInt':'Проценты','c.thBal':'Остаток',
   'c.first12':'Показать первые 12 месяцев','c.all':'Показать все месяцы ({n})','c.allCur':'Все суммы в драмах.',
   'c.note':'Расчёт приблизительный. Банки могут добавлять комиссии, страховку или считать дни иначе, поэтому реальные платежи могут отличаться.',
+  'cm.title':'Сравнение кредитов банков','cm.type':'Тип кредита','cm.consumer':'Потребительский кредит','cm.car':'Автокредит','cm.mortgage':'Ипотека',
+  'cm.sort':'Сортировка','cm.sCost':'По общей стоимости','cm.sPay':'По платежу','cm.sRate':'По ставке','cm.best':'Самый выгодный',
+  'cm.rateLine':'{rate}% годовых','cm.feeLine':'разовая комиссия {fee}%','cm.firstMonth':'в 1-й месяц','cm.interest':'Проценты','cm.fee':'Разовая комиссия','cm.total':'Общая стоимость',
+  'cm.more':'На {amt} дороже самого выгодного','cm.hidden':{one:'{n} банк не предлагает такую сумму или срок.',few:'{n} банка не предлагают такую сумму или срок.',many:'{n} банков не предлагают такую сумму или срок.',other:'{n} банка не предлагают такую сумму или срок.'},'cm.none':'Для этой суммы и срока предложений нет.',
+  'cm.fix':'Исправьте выделенные поля, чтобы увидеть предложения.',
+  'cm.note':'Ставки примерные и не являются реальными предложениями. Точные условия уточняйте в банке. Общая стоимость включает разовую комиссию.',
+  'ap.btn':'Подать заявку','ap.applied':'Заявка сохранена ✓','ap.title':'Заявка: {bank}','ap.income':'Ежемесячный доход','ap.emp':'Занятость','ap.emp.employed':'Работаю по найму','ap.emp.self':'Самозанятый','ap.emp.other':'Другое',
+  'ap.consent':'Согласен(на) передать мои данные в банк для рассмотрения заявки на кредит.','ap.submit':'Отправить заявку','ap.sending':'Сохранение…','ap.cancel':'Отмена',
+  'ap.noteDb':'Демо: заявка сохранена в вашем аккаунте, но пока не отправляется в банк.','ap.noteLocal':'Демо: заявка сохранена только в этом браузере и не отправляется в банк.',
+  'ap.done':'Заявка сохранена','ap.doneText':'Ваша заявка сохранена ({bank}). В банк она пока не отправлена (демо).','ap.ref':'Номер','ap.close':'Закрыть',
+  'ap.eIncome':'Введите ежемесячный доход в {cur}, не менее {min}.','ap.eConsent':'Чтобы продолжить, дайте согласие.','ap.saveErr':'Не удалось сохранить: ',
+  'ap.mine':'Мои заявки','ap.none':'Заявок пока нет. Подайте заявку во вкладке «Сравнение».','ap.status.submitted':'Сохранена',
   'p.since':'С нами с','p.consent':'Согласие на запрос истории','p.given':'Дано {d}','p.reminders':'Напоминания о платежах','p.ofLoans':'{a} из {n}',
   'p.where':'Где хранятся данные','p.inAcc':'В вашем аккаунте','p.inBrowser':'Только в этом браузере',
   'p.details':'Личные данные','p.emailHint':'Вы входите с этой почтой, поэтому изменить её здесь нельзя.',
@@ -911,6 +959,177 @@ document.addEventListener('focusout',e=>{ if(e.target.id==='c-amount'&&calc.amou
 document.addEventListener('submit',e=>{ if(e.target.id==='calcForm'){ e.preventDefault(); e.stopImmediatePropagation(); } },true);
 document.addEventListener('click',e=>{ if(e.target.closest('[data-calc-all]')){ calc.showAll=!calc.showAll; updateCalc(); } });
 
+/* ---------- Bank comparison ----------
+   SAMPLE rates for the demo, not real offers. Per loan type: [yearly rate %, one-time fee % of the loan, max amount, max months]; null = not offered.
+   Replace with real, regularly updated offers (or a data feed) before showing real users. */
+const OFFERS=[
+  {bank:'Ameriabank',  consumer:[15.5,1.0,15e6,84], car:[12.5,0.5,30e6,96], mortgage:[10.2,0.5,80e6,240]},
+  {bank:'Ardshinbank', consumer:[16.0,0.8,12e6,84], car:[12.9,0.5,25e6,96], mortgage:[9.9,0.7,100e6,240]},
+  {bank:'Inecobank',   consumer:[15.0,1.2,10e6,72], car:[13.5,0.4,20e6,84], mortgage:[10.5,0.5,70e6,240]},
+  {bank:'ACBA Bank',   consumer:[16.5,0.5,8e6,60],  car:[13.0,0.5,20e6,84], mortgage:[10.0,0.6,60e6,240]},
+  {bank:'Converse Bank',consumer:[14.9,1.5,20e6,84],car:[12.0,0.8,35e6,96], mortgage:[9.8,0.8,90e6,300]},
+  {bank:'Evocabank',   consumer:[16.9,0,6e6,60],    car:[14.0,0,15e6,72],   mortgage:null},
+  {bank:'Fast Bank',   consumer:[18.5,0,3e6,48],    car:null,               mortgage:null}
+];
+let cmp={type:'consumer',amount:3000000,period:3,unit:'years',method:'annuity',sort:'cost'};
+function cmpInputs(){
+  const P=cmp.amount, n=cmp.unit==='years'?Math.round(cmp.period*12):Math.round(cmp.period), e={};
+  if(!(P>=10000&&P<=1e10)) e.amount=t('c.eAmount',{min:nf(10000),max:nf(1e10),cur:t('cur')});
+  if(!(n>=1&&n<=480)) e.period=cmp.unit==='years'?t('c.eYears'):t('c.eMonths');
+  return {P,n,e};
+}
+function viewCmp(){
+  const c=cmp;
+  return `<div class="calc">
+    <section class="panel">
+      <h2>${t('cm.title')}</h2>
+      <form id="cmpForm" novalidate>
+        <div class="field"><label for="m-type">${t('cm.type')}</label>
+          <select id="m-type" data-cmp="type">${['consumer','car','mortgage'].map(k=>`<option value="${k}" ${c.type===k?'selected':''}>${t('cm.'+k)}</option>`).join('')}</select></div>
+        <div class="field"><label for="m-amount">${t('c.amount')}</label>
+          <div class="affix"><input id="m-amount" data-cmp="amount" inputmode="numeric" autocomplete="off" value="${nf(c.amount)}" aria-describedby="m-amount-e"><span>${t('cur')}</span></div>
+          <span class="err" id="m-amount-e"></span></div>
+        <div class="field"><label for="m-period">${t('c.period')}</label>
+          <div class="combo"><input id="m-period" data-cmp="period" type="number" inputmode="decimal" min="1" step="1" value="${c.period}" aria-describedby="m-period-e">
+          <select data-cmp="unit" aria-label="${esc(t('c.unit'))}"><option value="years" ${c.unit==='years'?'selected':''}>${t('c.years')}</option><option value="months" ${c.unit==='months'?'selected':''}>${t('c.months')}</option></select></div>
+          <span class="err" id="m-period-e"></span></div>
+        <fieldset class="seg-wrap"><legend>${t('c.method')}</legend><div class="seg">
+          <label><input type="radio" name="cmethod" value="annuity" data-cmp="method" ${c.method==='annuity'?'checked':''}>${t('c.annuity')}</label>
+          <label><input type="radio" name="cmethod" value="diff" data-cmp="method" ${c.method==='diff'?'checked':''}>${t('c.diff')}</label>
+        </div></fieldset>
+      </form>
+    </section>
+    <div id="cmpOut" aria-live="polite"></div>
+  </div>
+  <p class="note">${t('cm.note')}</p>`;
+}
+function updateCmp(){
+  const out=$('#cmpOut'); if(!out) return;
+  const {P,n,e}=cmpInputs();
+  ['amount','period'].forEach(k=>{const el=$('#m-'+k+'-e'); if(el) el.textContent=e[k]||''; const f=$('#m-'+k); if(f){f.setAttribute('aria-invalid',!!e[k]); f.closest('.field').classList.toggle('bad',!!e[k]);}});
+  if(Object.keys(e).length){ out.innerHTML=`<section class="panel empty">${t('cm.fix')}</section>`; return; }
+  const rows=[]; let hidden=0;
+  OFFERS.forEach(o=>{
+    const d=o[cmp.type]; if(!d||P>d[2]||n>d[3]){ hidden++; return; }
+    const res=schedule(P,n,d[0],cmp.method), fee=P*d[1]/100;
+    rows.push({bank:o.bank,rate:d[0],feePct:d[1],fee,first:res.rows[0].payment,interest:res.interest,total:res.total+fee});
+  });
+  const best=Math.min(...rows.map(r=>r.total));
+  const key={cost:'total',pay:'first',rate:'rate'}[cmp.sort];
+  rows.sort((a,b)=>a[key]-b[key]||a.total-b.total);
+  cmpShown=rows;
+  const chips=['cost','pay','rate'].map(k=>`<button type="button" class="chip" data-cmp-sort="${k}" aria-pressed="${cmp.sort===k}">${t('cm.s'+k[0].toUpperCase()+k.slice(1))}</button>`).join('');
+  out.innerHTML=`<div class="toolbar" role="group" aria-label="${esc(t('cm.sort'))}"><span class="sub">${t('cm.sort')}:</span>${chips}</div>
+    ${rows.length?`<div class="list">${rows.map((r,i)=>`<article class="loan">
+      <div class="row"><div><h3>${i+1}. ${esc(lender(r.bank))}</h3><div class="sub">${t('cm.rateLine',{rate:r.rate})}${r.feePct?' · '+t('cm.feeLine',{fee:r.feePct}):''}</div></div>${r.total===best?`<span class="pill good">${t('cm.best')}</span>`:''}</div>
+      <div class="kv">
+        <div><span class="l">${t('c.monthly')}${cmp.method==='diff'?` (${t('cm.firstMonth')})`:''}</span><span class="v num">${amd(r.first)}</span></div>
+        <div><span class="l">${t('cm.interest')}</span><span class="v num">${amd(r.interest)}</span></div>
+        <div><span class="l">${t('cm.fee')}</span><span class="v num">${amd(r.fee)}</span></div>
+        <div><span class="l">${t('cm.total')}</span><span class="v num">${amd(r.total)}</span></div>
+      </div>
+      ${r.total>best?`<div class="sub">${t('cm.more',{amt:amd(r.total-best)})}</div>`:''}
+      <div class="actions"><button class="btn primary" type="button" data-apply="${i}" ${appliedTo(r.bank,cmp.type)?'disabled':''}>${appliedTo(r.bank,cmp.type)?t('ap.applied'):t('ap.btn')}</button></div>
+    </article>`).join('')}</div>`:`<section class="panel empty">${t('cm.none')}</section>`}
+    ${hidden&&rows.length?`<p class="note">${t('cm.hidden',{n:hidden})}</p>`:''}`;
+}
+function onCmpInput(el){
+  const k=el.dataset.cmp;
+  if(k==='amount') cmp.amount=Number(el.value.replace(/[^\d.]/g,''))||0;
+  else if(k==='period') cmp.period=el.value===''?NaN:Number(el.value);
+  else if(k==='unit'){
+    const months=cmp.unit==='years'?cmp.period*12:cmp.period;
+    cmp.unit=el.value; cmp.period=cmp.unit==='years'?Math.round(months/12*10)/10:Math.round(months);
+    const f=$('#m-period'); if(f) f.value=cmp.period;
+  }
+  else cmp[k]=el.value;
+  updateCmp();
+}
+document.addEventListener('input',e=>{ const el=e.target.closest('[data-cmp]'); if(el&&el.type!=='radio'&&el.tagName!=='SELECT') onCmpInput(el); });
+document.addEventListener('change',e=>{ const el=e.target.closest('[data-cmp]'); if(el&&(el.type==='radio'||el.tagName==='SELECT')) onCmpInput(el); });
+document.addEventListener('focusout',e=>{ if(e.target.id==='m-amount'&&cmp.amount) e.target.value=nf(cmp.amount); });
+document.addEventListener('submit',e=>{ if(e.target.id==='cmpForm'){ e.preventDefault(); e.stopImmediatePropagation(); } },true);
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-cmp-sort]'); if(b){ cmp.sort=b.dataset.cmpSort; updateCmp(); } });
+
+/* ---------- Apply for a loan ----------
+   Saves the application (Supabase table `applications`, or this browser in demo mode). It is NOT forwarded to the bank:
+   that needs an agreement and an API or lead feed from each bank. */
+let apps=[];
+if(!sb){ try{ apps=JSON.parse(localStorage.getItem('scoreup-apps')||'[]'); }catch(e){} }
+let cmpShown=[];
+let ap={offer:null,form:{},errors:{},busy:false,done:null};
+const appliedTo=(bank,type)=>apps.some(a=>a.bank===bank&&a.type===type);
+function openApply(i){
+  const r=cmpShown[i]; if(!r||appliedTo(r.bank,cmp.type)||!user) return;
+  const {P,n}=cmpInputs();
+  ap={offer:{bank:r.bank,type:cmp.type,amount:P,months:n,rate:r.rate,method:cmp.method,first:r.first},
+      form:{name:user.name||'',phone:user.phone||'',income:'',emp:'employed',consent:false},errors:{},busy:false,done:null};
+  renderApply(); $('#applyDlg').showModal();
+}
+function readApplyForm(){
+  const v=id=>{const el=$('#'+id,$('#applyDlg')); return el?el.value.trim():undefined;};
+  const f=ap.form, g=(k,id)=>{const x=v(id); if(x!==undefined) f[k]=x;};
+  g('name','ap-name'); g('phone','ap-phone'); g('income','ap-income'); g('emp','ap-emp');
+  const c=$('#ap-consent',$('#applyDlg')); if(c) f.consent=c.checked;
+}
+function renderApply(){
+  const d=$('#applyDlg'), o=ap.offer; if(!o) return;
+  const bank=esc(lender(o.bank));
+  if(ap.done){
+    d.innerHTML=`<h2>${t('ap.done')}</h2><p class="sub" style="margin:0 0 12px">${t('ap.doneText',{bank})}</p>
+      <div class="apsum"><b>${t('ap.ref')}:</b> <span class="num">${esc(ap.done.id)}</span></div>
+      <div class="formrow"><button class="btn primary" type="button" data-ap-mine>${t('ap.mine')}</button><button class="btn" type="button" data-ap-close>${t('ap.close')}</button></div>`;
+    return;
+  }
+  const f=ap.form, e=ap.errors;
+  const fl=(id,label,val,err,extra='')=>`<div class="field ${err?'bad':''}"><label for="${id}">${label}</label><input id="${id}" value="${esc(val||'')}" ${extra} aria-invalid="${!!err}"><span class="err">${err?esc(err):''}</span></div>`;
+  d.innerHTML=`<form id="applyForm" novalidate>
+    <h2>${t('ap.title',{bank})}</h2>
+    <div class="apsum"><b>${t('cm.'+o.type)}</b> · ${amd(o.amount)} · ${o.months} ${t('c.months')} · ${t('cm.rateLine',{rate:o.rate})}<br>${t('c.monthly')}${o.method==='diff'?` (${t('cm.firstMonth')})`:''}: <b class="num">${amd(o.first)}</b></div>
+    <div class="demo">${sb?t('ap.noteDb'):t('ap.noteLocal')}</div>
+    ${fl('ap-name',t('fld.name'),f.name,e.name,'autocomplete="name"')}
+    ${fl('ap-phone',t('fld.phone'),f.phone,e.phone,'type="tel" autocomplete="tel" placeholder="+374 XX XXX XXX"')}
+    ${fl('ap-income',t('ap.income')+', '+t('cur'),f.income,e.income,'inputmode="numeric" autocomplete="off"')}
+    <div class="field"><label for="ap-emp">${t('ap.emp')}</label><select id="ap-emp">${['employed','self','other'].map(k=>`<option value="${k}" ${f.emp===k?'selected':''}>${t('ap.emp.'+k)}</option>`).join('')}</select></div>
+    <label class="check"><input type="checkbox" id="ap-consent" ${f.consent?'checked':''}><span>${t('ap.consent')}</span></label>
+    ${e.consent?`<div class="field bad" style="margin-top:-8px"><span class="err">${esc(e.consent)}</span></div>`:''}
+    ${e.form?`<div class="field bad"><span class="err" role="alert">${esc(e.form)}</span></div>`:''}
+    <div class="formrow"><button class="btn primary" type="submit" ${ap.busy?'disabled':''}>${ap.busy?t('ap.sending'):t('ap.submit')}</button><button class="btn" type="button" data-ap-close ${ap.busy?'disabled':''}>${t('ap.cancel')}</button></div>
+  </form>`;
+}
+document.addEventListener('submit',async ev=>{
+  if(ev.target.id!=='applyForm') return;
+  ev.preventDefault(); ev.stopImmediatePropagation();
+  if(ap.busy) return;
+  readApplyForm(); const f=ap.form, o=ap.offer, e={};
+  const income=Number(String(f.income).replace(/[^\d.]/g,''))||0;
+  if(f.name.split(/\s+/).filter(Boolean).length<2) e.name=t('e.name');
+  if(!phoneOk(f.phone)) e.phone=t('e.phone');
+  if(income<10000) e.income=t('ap.eIncome',{cur:t('cur'),min:nf(10000)});
+  if(!f.consent) e.consent=t('ap.eConsent');
+  ap.errors=e; if(Object.keys(e).length){ renderApply(); return; }
+  ap.busy=true; renderApply();
+  let rec;
+  try{
+    if(sb){
+      const {data,error}=await sb.from('applications').insert({user_id:user.id,applicant_name:f.name,phone:f.phone,bank:o.bank,loan_type:o.type,amount:o.amount,months:o.months,rate:o.rate,method:o.method,monthly_income:income,employment:f.emp}).select('id,created_at,status').single();
+      if(error) throw error;
+      rec={id:String(data.id).slice(0,8).toUpperCase(),bank:o.bank,type:o.type,amount:o.amount,months:o.months,when:data.created_at,status:data.status};
+    } else {
+      rec={id:'A'+Math.random().toString(36).slice(2,8).toUpperCase(),bank:o.bank,type:o.type,amount:o.amount,months:o.months,when:new Date().toISOString(),status:'submitted'};
+      apps.unshift(rec); try{ localStorage.setItem('scoreup-apps',JSON.stringify(apps)); }catch(_){}
+    }
+  }catch(err){ ap.busy=false; ap.errors={form:t('ap.saveErr')+(err.message||err)}; renderApply(); return; }
+  if(sb) apps.unshift(rec);
+  ap.busy=false; ap.done=rec; renderApply(); updateCmp();
+},true);
+document.addEventListener('click',ev=>{
+  const a=ev.target.closest('[data-apply]'); if(a){ openApply(Number(a.dataset.apply)); return; }
+  if(ev.target.closest('[data-ap-close]')){ $('#applyDlg').close(); return; }
+  if(ev.target.closest('[data-ap-mine]')){ $('#applyDlg').close(); state.tab='profile'; try{history.replaceState(null,'','#profile')}catch(_){} render(); window.scrollTo(0,0); }
+});
+$('#applyDlg').addEventListener('close',()=>{ ap.offer=null; });
+
 /* ---------- Profile ---------- */
 let prof={errors:{},saved:false,busy:false};
 function viewProfile(){
@@ -944,6 +1163,10 @@ function viewProfile(){
         <h2>${t('p.remTitle')}</h2>
         <p class="sub" style="margin:0 0 12px">${t('p.remText',{a:on,n:active.length})}</p>
         <button class="btn" data-tab="loans">${t('p.manage')}</button>
+      </section>
+      <section class="panel">
+        <h2>${t('ap.mine')}</h2>
+        ${apps.length?apps.map(a=>`<div class="appr"><div><b>${esc(lender(a.bank))}</b><div class="sub">${t('cm.'+a.type)} · ${amd(a.amount)} · ${a.months} ${t('c.months')}</div></div><div class="r"><span class="pill mute">${t('ap.status.'+a.status)}</span><span class="sub">${fmtDate(a.when)}</span></div></div>`).join(''):`<p class="sub" style="margin:0">${t('ap.none')}</p>`}
       </section>
       <section class="panel">
         <h2>${t('signout')}</h2>
@@ -1007,10 +1230,11 @@ function viewTips(){
 }
 
 /* ---------- Render & events ---------- */
-const VIEWS={overview:viewOverview,loans:viewLoans,inquiries:viewChecks,guarantees:viewGuarantees,calculator:viewCalc,tips:viewTips,alerts:viewAlerts,profile:viewProfile};
+const VIEWS={overview:viewOverview,loans:viewLoans,inquiries:viewChecks,guarantees:viewGuarantees,calculator:viewCalc,compare:viewCmp,tips:viewTips,alerts:viewAlerts,profile:viewProfile};
 function render(){
   $('#view').innerHTML=VIEWS[state.tab]();
   if(state.tab==='calculator') updateCalc();
+  if(state.tab==='compare') updateCmp();
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.tab===state.tab));
   const me=$('.me'); if(me){ if(state.tab==='profile') me.setAttribute('aria-current','page'); else me.removeAttribute('aria-current'); }
   const u=ALERTS.filter(a=>!a.read).length, b=$('#alertBadge'); b.hidden=!u; b.textContent=u;
@@ -1120,10 +1344,12 @@ function friendly(err){
 }
 async function loadUser(session){
   const u=session.user;
-  const [{data:prof},{data:st}]=await Promise.all([
+  const [{data:prof},{data:st},{data:ar}]=await Promise.all([
     sb.from('profiles').select('full_name,phone,consent_at,created_at').eq('id',u.id).maybeSingle(),
-    sb.from('user_state').select('reminders,paid_loans,read_alerts').eq('user_id',u.id).maybeSingle()
+    sb.from('user_state').select('reminders,paid_loans,read_alerts').eq('user_id',u.id).maybeSingle(),
+    sb.from('applications').select('id,bank,loan_type,amount,months,created_at,status').order('created_at',{ascending:false})
   ]);
+  apps=(ar||[]).map(a=>({id:String(a.id).slice(0,8).toUpperCase(),bank:a.bank,type:a.loan_type,amount:Number(a.amount),months:a.months,when:a.created_at,status:a.status}));
   if(st) applyPrefs({remind:st.reminders,paid:st.paid_loans,read:st.read_alerts});
   return {id:u.id,email:u.email,name:(prof&&prof.full_name)||u.email.split('@')[0],phone:(prof&&prof.phone)||'',consent:prof&&prof.consent_at,since:(prof&&prof.created_at)||u.created_at};
 }
@@ -1180,6 +1406,7 @@ document.addEventListener('click',ev=>{
   if(!user) readForm();
   lang=b.dataset.lang; try{ localStorage.setItem('scoreup-lang',lang); }catch(_){}
   auth.errors={}; prof.errors={}; prof.saved=false; applyStatic(); showApp();
+  if($('#applyDlg').open){ if(!ap.done) readApplyForm(); renderApply(); }
 });
 document.addEventListener('click',async ev=>{
   const m=ev.target.closest('[data-auth-mode]');
